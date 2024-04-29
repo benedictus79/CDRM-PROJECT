@@ -4,21 +4,24 @@
 <!-- Main body block -->
 {% block main_body %}
 
+<!-- Heading -->
+<h1 id="index_inputs">Send Widevine license request</h1>
+
 <!-- Forms for entering widevine license request information -->
-<form>
-    <label for="index_pssh">PSSH:</label>
+<form id="decrypt_form">
+    <label id="index_pssh_label" for="index_pssh">PSSH:</label>
     <input type="text" id="index_pssh" name="pssh">
     <br>
-    <label for="license_url">License URL:</label>
+    <label id="license_url_label" for="license_url">License URL:</label>
     <input type="text" id="license_url" name="licemse_url">
     <br>
-    <label for="headers">Headers:</label>
+    <label id="headers_label" for="headers">Headers:</label>
     <input type="text" id="headers" name="headers">
     <br>
-    <label for="json">JSON: </label>
+    <label id="json_label" for="json">JSON: </label>
     <input type="text" id="json" name="json">
     <br>
-    <input type="submit" id="submit">
+    <input type="submit" id="index_submit" name="index_submit" value="Submit">
 </form>
 
 {% endblock %}

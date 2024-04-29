@@ -20,7 +20,7 @@
 
     > Windows - change directory into the `Scripts` directory then `activate.bat`
     > 
-    > Linux - `source/activate`
+    > Linux - `source bin/activate`
 
  - Install python dependencies `pip install -r requirements.txt`
  - Place your .WVD file into the root of the directory
