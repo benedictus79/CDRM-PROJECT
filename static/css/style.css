@@ -1,0 +1,19 @@
+/* Body  */
+body {
+    background-color: slategrey;
+}
+
+/* Anchor links */
+a {
+    color: black;
+}
+
+/* Header */
+header {
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+}

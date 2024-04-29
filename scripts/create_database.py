@@ -27,3 +27,6 @@ def create_database():
 
         # Close the connection
         dbconnection.close()
+
+    # Change back to root directory
+    os.chdir(os.path.join(os.getcwd(), ".."))
