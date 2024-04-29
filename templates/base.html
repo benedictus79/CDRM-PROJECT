@@ -1,0 +1,45 @@
+<!-- Doctype -->
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Heading -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDRM-Project-2.0</title>
+</head>
+
+<!-- Body -->
+<body id="html-body">
+
+    <!-- Header -->
+    <header id="header">
+        <a href="{{ url_for('main_page') }}">CDRM-Project 2.0</a>
+    </header>
+
+    <!-- Sidebar -->
+    <nav id="sidebar-nav">
+        <ul id="sidebar-ul">
+            <li id="home-sidebar" class="sidebar"><a href="{{ url_for('main_page') }}">Home</a></li>
+            <li id="cache-sidebar" class="sidebar"><a href="{{ url_for('cache_page') }}">Cache</a></li>
+            <li id="faq-sidebar" class="sidebar"><a href="{{ url_for('faq_page') }}">FAQ</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main body -->
+
+    {% block main_body %}
+        <main id="main_body">
+            <p>Default</p>
+        </main>
+    {% endblock %}
+
+    <!-- Footer -->
+    <footer id="footer">
+        <a id="footer-text-1" href="https://cdm-project.com/">Brought to you by the CDM-Project</a>
+        |
+        <a id="footer-text-2" href="https://cdm-project.com/">View this sites source code</a>
+    </footer>
+
+</body>
+</html>
