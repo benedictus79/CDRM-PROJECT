@@ -11,9 +11,11 @@ a {
 /* Header */
 header {
     text-align: center;
+    background-color: lightslategrey;
 }
 
 /* Footer */
 footer {
     text-align: center;
+    background-color: lightslategrey;
 }
