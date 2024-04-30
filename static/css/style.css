@@ -8,6 +8,11 @@ a {
     color: black;
 }
 
+/* Anchor links hover */
+a:hover {
+    color: darkslateblue;
+}
+
 /* Header */
 header {
     text-align: center;
@@ -19,3 +24,5 @@ footer {
     text-align: center;
     background-color: lightslategrey;
 }
+
+

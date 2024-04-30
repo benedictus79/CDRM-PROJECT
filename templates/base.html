@@ -17,8 +17,10 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous"
     >
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <!-- Body -->
@@ -30,13 +32,11 @@
     </header>
 
     <!-- Sidebar -->
-    <nav id="sidebar-nav">
-        <ul id="sidebar-ul">
-            <li id="home-sidebar" class="sidebar"><a href="{{ url_for('main_page') }}">Home</a></li>
-            <li id="cache-sidebar" class="sidebar"><a href="{{ url_for('cache_page') }}">Cache</a></li>
-            <li id="faq-sidebar" class="sidebar"><a href="{{ url_for('faq_page') }}">FAQ</a></li>
-            <li id="login-sidebar" class="sidebar"><a href="{{ url_for('login_page') }}">Login</a></li>
-        </ul>
+    <nav id="sidebar-nav" class="sidebar">
+        <a href="{{ url_for('main_page') }}"> <img src="{{ url_for('static', filename='assets/home-modern.svg') }}"> </a>
+        <a href="{{ url_for('cache_page') }}"> <img src="{{ url_for('static', filename='assets/database-search.svg') }}"> </a>
+        <a href="{{ url_for('faq_page') }}"> <img src="{{ url_for('static', filename='assets/help-circle.svg') }}"> </a>
+        <a href="{{ url_for('login_page') }}"> <img src="{{ url_for('static', filename='assets/login.svg') }}"> </a>
     </nav>
 
     <!-- Main body -->
