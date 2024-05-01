@@ -1,0 +1,10 @@
+main {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    width: 100%;
+    justify-items: center;
+}
+
+#index_inputs {
+    align-self: flex-end;
+}

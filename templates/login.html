@@ -1,8 +1,27 @@
 <!-- Extend the base HTML template -->
 {% extends "base.html" %}
 
+<!-- Extend CSS to add CSS for particular page -->
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
 <!-- Main body block -->
 {% block main_body %}
+
+<h1 id="login_header_1">Login</h1>
+
+<form id="login_form">
+    <label for="username" id="username_label">Username</label>
+    <br>
+    <input type="text" id="username">
+    <br>
+    <label for="password" id="password_label">Password</label>
+    <br>
+    <input type="text" id="password">
+    <br>
+    <input type="submit" name="submit" value="Submit">
+</form>
 
 <!-- End main block -->
 {% endblock %}

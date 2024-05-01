@@ -15,6 +15,7 @@ if WVD is None:
 # Define Flask app object, give template and static arguments.
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
 
+
 # Route for root '/'
 @app.route("/", methods=['GET'])
 def main_page():
@@ -34,6 +35,7 @@ def cache_page():
 def faq_page():
     if request.method == 'GET':
         return render_template('faq.html')
+
 
 # Route for '/login'
 @app.route("/login", methods=['GET'])
