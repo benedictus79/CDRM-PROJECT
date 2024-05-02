@@ -4,7 +4,7 @@ main {
     grid-template-rows: auto 2fr auto;
 }
 
-#cache_inputs {
+h1 {
     display: grid;
     grid-column-start: 2;
     grid-row-start: 1;
@@ -14,11 +14,16 @@ main {
     padding-top: 10%;
 }
 
-#cache_form {
+form {
     display: grid;
     grid-column-start: 2;
     grid-row-start: 2;
     grid-column-end: 3;
     grid-row-end: 3;
     width: 100%;
+}
+
+input {
+    background-color: #afaeae;
+    resize: none;
 }

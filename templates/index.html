@@ -13,25 +13,22 @@
 <main>
 
     <!-- Heading -->
-    <h1 id="index_inputs">Send Widevine license request</h1>
+    <h1>Send Widevine license request</h1>
 
     <!-- Forms for entering widevine license request information -->
     <div id="decrypt_form">
-        <label id="index_pssh_label" for="index_pssh">PSSH:</label>
-        <br>
+        <p>PSSH:</p>
         <textarea id="index_pssh" rows="1" cols="1"></textarea>
-        <br>
-        <label id="license_url_label" for="license_url">License URL:</label>
-        <br>
+
+        <p>License URL:</p>
         <textarea id="license_url" rows="1" cols="1"></textarea>
-        <br>
-        <label id="headers_label" for="headers">Headers:</label>
-        <br>
-        <textarea id="license_url" rows="5" cols="1"></textarea>
-        <br>
-        <label id="json_label" for="json">JSON: </label>
-        <br>
+
+        <p>Headers:</p>
+        <textarea id="headers" rows="5" cols="1"></textarea>
+
+        <p>JSON:</p>
         <textarea id="json" rows="5" cols="1"></textarea>
+
         <button id="decrypt_button" type="button">Decrypt!</button>
     </div>
 

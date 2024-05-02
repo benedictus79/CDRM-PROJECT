@@ -7,7 +7,7 @@ main {
     justify-items: center;
 }
 
-#faq_heading_1 {
+h1 {
     display: grid;
     grid-column-start: 2;
     grid-row-start: 1;
@@ -27,8 +27,7 @@ main {
 }
 
 .question {
-    border-color: #011c51;
+    border-color: #afaeae;
     border-style: solid;
     padding: 1% 5% 1% 5%;
-    border-radius: 10%;
 }

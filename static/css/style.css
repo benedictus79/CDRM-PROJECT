@@ -1,15 +1,14 @@
 html {
     display: grid;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(120deg, rgb(30, 41, 59), rgb(30, 27, 75));
 }
 
 body {
     display: grid;
     grid-template-rows: auto auto 4fr 1.5fr;
     grid-template-columns: 1fr;
-    background-image: linear-gradient(120deg, #000000, #011c51);
-    background-size: 100% 100%;
 }
 
 header {

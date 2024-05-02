@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CDRM-Project-2.0</title>
+    <title>CDRM-Project 2.0</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     {% block css %}
     {% endblock %}
@@ -16,7 +16,7 @@
 </head>
 
 <!-- Body -->
-<body id="html-body">
+<body>
 
     <!-- Sidebar -->
     <!--
@@ -29,8 +29,8 @@
     -->
 
     <!-- Header -->
-    <header id="header">
-        <a class="header_hred" href="{{ url_for('main_page') }}"> <img class="header_logo" src="{{ url_for('static', filename='assets/logo.png') }}"> </a>
+    <header>
+        <a href="{{ url_for('main_page') }}"> <img class="header_logo" src="{{ url_for('static', filename='assets/logo.png') }}"> </a>
     </header>
 
     <!-- Navbar -->
@@ -47,9 +47,9 @@
     {% endblock %}
 
     <!-- Footer -->
-    <footer id="footer">
-        <a id="footer-text-1" href="https://cdm-project.com/">Brought to you by the CDM-Project</a>
-        <a id="footer-text-2" href="https://cdm-project.com/">View this sites source code</a>
+    <footer>
+        <a href="https://cdm-project.com/">Brought to you by the CDM-Project</a>
+        <a href="https://cdm-project.com/">View this sites source code</a>
     </footer>
 
 </body>
