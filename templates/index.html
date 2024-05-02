@@ -9,28 +9,34 @@
 <!-- Main body block -->
 {% block main_body %}
 
-<!-- Heading -->
-<h1 id="index_inputs">Send Widevine license request</h1>
+<!-- Main -->
+<main>
 
-<!-- Forms for entering widevine license request information -->
-<form id="decrypt_form">
-    <label id="index_pssh_label" for="index_pssh">PSSH:</label>
-    <br>
-    <input type="text" id="index_pssh" name="pssh">
-    <br>
-    <label id="license_url_label" for="license_url">License URL:</label>
-    <br>
-    <input type="text" id="license_url" name="licemse_url">
-    <br>
-    <label id="headers_label" for="headers">Headers:</label>
-    <br>
-    <input type="text" id="headers" name="headers">
-    <br>
-    <label id="json_label" for="json">JSON: </label>
-    <br>
-    <input type="text" id="json" name="json">
-    <br>
-    <button id="decrypt_button" type="button">Decrypt!</button>
-</form>
+    <!-- Heading -->
+    <h1 id="index_inputs">Send Widevine license request</h1>
+
+    <!-- Forms for entering widevine license request information -->
+    <div id="decrypt_form">
+        <label id="index_pssh_label" for="index_pssh">PSSH:</label>
+        <br>
+        <textarea id="index_pssh" rows="1" cols="1"></textarea>
+        <br>
+        <label id="license_url_label" for="license_url">License URL:</label>
+        <br>
+        <textarea id="license_url" rows="1" cols="1"></textarea>
+        <br>
+        <label id="headers_label" for="headers">Headers:</label>
+        <br>
+        <textarea id="license_url" rows="5" cols="1"></textarea>
+        <br>
+        <label id="json_label" for="json">JSON: </label>
+        <br>
+        <textarea id="json" rows="5" cols="1"></textarea>
+        <button id="decrypt_button" type="button">Decrypt!</button>
+    </div>
+
+    <p id="keys_header">Keys</p>
+    <p id="decrypt_results"></p>
+</main>
 
 {% endblock %}

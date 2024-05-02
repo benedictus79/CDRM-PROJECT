@@ -33,6 +33,7 @@
         <a class="header_hred" href="{{ url_for('main_page') }}"> <img class="header_logo" src="{{ url_for('static', filename='assets/logo.png') }}"> </a>
     </header>
 
+    <!-- Navbar -->
     <nav>
         <a class="navi" href="{{ url_for('main_page') }}">Home</a>
         <a class="navi" href="{{ url_for('cache_page') }}">Cache</a>
@@ -41,11 +42,9 @@
     </nav>
 
     <!-- Main body -->
-    <main id="main_body">
     {% block main_body %}
-
+    <!-- Must specifcy <main> concurrent templates, this is to make CSS Grid easier. -->
     {% endblock %}
-    </main>
 
     <!-- Footer -->
     <footer id="footer">

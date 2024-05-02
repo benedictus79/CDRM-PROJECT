@@ -8,20 +8,23 @@
 
 <!-- Main body block -->
 {% block main_body %}
+<main>
 
-<h1 id="login_header_1">Login</h1>
+    <h1 id="login_header_1">Login</h1>
 
-<form id="login_form">
-    <label for="username" id="username_label">Username</label>
-    <br>
-    <input type="text" id="username">
-    <br>
-    <label for="password" id="password_label">Password</label>
-    <br>
-    <input type="text" id="password">
-    <br>
-    <input type="submit" name="submit" value="Submit">
-</form>
+    <div id="login_form">
+        <label for="username" id="username_label">Username</label>
+        <br>
+        <input type="text" id="username">
+        <br>
+        <label for="password" id="password_label">Password</label>
+        <br>
+        <input type="text" id="password">
+        <br>
+        <input type="submit" name="submit" value="Log in">
+    </div>
+
+</main>
 
 <!-- End main block -->
 {% endblock %}
