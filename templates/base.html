@@ -30,26 +30,25 @@
 
     <!-- Header -->
     <header>
-        <a href="{{ url_for('main_page') }}"> <img class="header_logo" src="{{ url_for('static', filename='assets/logo.png') }}"> </a>
+        <a id="logo_href" href="{{ url_for('main_page') }}"> <img class="header_logo" src="{{ url_for('static', filename='assets/logo.png') }}"> </a>
+        <!-- Navbar -->
+        <nav>
+            <a id="main_href" class="navi" href="{{ url_for('main_page') }}">Home</a>
+            <a id="cache_href" class="navi" href="{{ url_for('cache_page') }}">Cache</a>
+            <a id="faq_href" class="navi" href="{{ url_for('faq_page') }}">FAQ</a>
+            <a id="login_href" class="navi" href="{{ url_for('login_page') }}">Login</a>
+        </nav>
     </header>
-
-    <!-- Navbar -->
-    <nav>
-        <a class="navi" href="{{ url_for('main_page') }}">Home</a>
-        <a class="navi" href="{{ url_for('cache_page') }}">Cache</a>
-        <a class="navi" href="{{ url_for('faq_page') }}">FAQ</a>
-        <a class="navi" href="{{ url_for('login_page') }}">Login</a>
-    </nav>
 
     <!-- Main body -->
     {% block main_body %}
-    <!-- Must specifcy <main> concurrent templates, this is to make CSS Grid easier. -->
+    <!-- Must specify <main> concurrent templates, this is to make CSS Grid easier. -->
     {% endblock %}
 
     <!-- Footer -->
     <footer>
-        <a href="https://cdm-project.com/">Brought to you by the CDM-Project</a>
-        <a href="https://cdm-project.com/">View this sites source code</a>
+        <a id="flink1" href="https://cdm-project.com/">Brought to you by the CDM-Project</a>
+        <a id="flink2" href="https://cdm-project.com/">View this sites source code</a>
     </footer>
 
 </body>
