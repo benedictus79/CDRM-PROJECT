@@ -1,6 +1,7 @@
 # Import dependencies
 from flask import Flask, render_template, request, jsonify
 import scripts
+import uuid
 
 # Create database if it doesn't exist
 scripts.create_database.create_database()
@@ -15,6 +16,8 @@ if WVD is None:
 # Define Flask app object, give template and static arguments.
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
 
+# Create a secret key for logins
+app.secret_key = str(uuid.uuid4())
 
 # Route for root '/'
 @app.route("/", methods=['GET', 'POST'])
@@ -51,12 +54,18 @@ def faq_page():
     if request.method == 'GET':
         return render_template('faq.html')
 
-
 # Route for '/login'
-@app.route("/login", methods=['GET'])
+@app.route("/login", methods=['GET', 'POST'])
 def login_page():
     if request.method == 'GET':
         return render_template('login.html')
+    if request.method == 'POST':
+        request_type = request.json['type']
+        if request_type == 'Register':
+            return
+        if request_type == 'Login':
+            return
+
 
 
 # If the script is called directly, start the flask app.

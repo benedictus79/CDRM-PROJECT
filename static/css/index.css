@@ -25,6 +25,23 @@ div {
     grid-column-end: 8;
 }
 
+textarea {
+    padding: 8px;
+    border: 1px solid #4b84bf7a;
+    background: #b3b3b32e;
+    color: white;
+    border-radius: 3px;
+}
+
+.lock-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url('https://www.svgrepo.com/show/136946/lock.svg');
+    background-size: cover;
+    margin-right: 5px;
+}
+
 #keys_paragraph {
     display: none;
     margin-top: 15%;
