@@ -23,6 +23,7 @@ div {
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
+    align-self: end;
 }
 
 #username {
@@ -30,6 +31,7 @@ div {
     grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 3;
+    height: 50%;
 }
 
 #password_label {
@@ -37,6 +39,7 @@ div {
     grid-column-end: 3;
     grid-row-start: 3;
     grid-row-end: 4;
+    align-self: end;
 }
 
 #password {
@@ -44,6 +47,7 @@ div {
     grid-row-end: 5;
     grid-column-start: 2;
     grid-column-end: 3;
+    height: 50%;
 }
 
 #register_buttons {
@@ -53,4 +57,5 @@ div {
     grid-row-start: 5;
     grid-row-end: 6;
     grid-template-columns: repeat(2, 1fr);
+    align-self: start;
 }
