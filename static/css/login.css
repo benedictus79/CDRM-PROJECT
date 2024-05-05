@@ -10,8 +10,47 @@ div {
     grid-column-end: 7;
     justify-self: center;
     margin-top: 20%;
+    width: 100%
 }
 
-#login_button {
-    width: 100%;
+#login_form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#username_label {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#username {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#password_label {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+#password {
+    grid-row-start: 4;
+    grid-row-end: 5;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+#register_buttons {
+    display: grid;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 5;
+    grid-row-end: 6;
+    grid-template-columns: repeat(2, 1fr);
 }
