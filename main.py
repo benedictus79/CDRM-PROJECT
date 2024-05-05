@@ -1,5 +1,5 @@
 # Import dependencies
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import scripts
 
 # Create database if it doesn't exist
@@ -17,17 +17,32 @@ app = Flask(__name__, template_folder='templates', static_folder='static', stati
 
 
 # Route for root '/'
-@app.route("/", methods=['GET'])
+@app.route("/", methods=['GET', 'POST'])
 def main_page():
     if request.method == 'GET':
         return render_template('index.html')
+    elif request.method == 'POST':
+        decrypt_response = scripts.decrypt.decrypt_content(
+            in_pssh=request.json['PSSH'],
+            license_url=request.json['License URL'],
+            headers=request.json['Headers'],
+            json_data=request.json['JSON'],
+            wvd=WVD
+        )
+        return jsonify(decrypt_response)
 
 
 # Route for '/cache'
-@app.route("/cache", methods=['GET'])
+@app.route("/cache", methods=['GET', 'POST'])
 def cache_page():
     if request.method == 'GET':
         return render_template('cache.html')
+    if request.method == 'POST':
+        results = scripts.vault_check.check_database(pssh=request.json['PSSH'])
+        message = {
+            'Message': results
+        }
+        return jsonify(message)
 
 
 # Route for '/faq'

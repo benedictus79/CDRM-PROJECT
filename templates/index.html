@@ -6,6 +6,11 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
+<!-- Extend JS to add JS for particular page -->
+{%  block js %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
+
 <!-- Main body block -->
 {% block main_body %}
 
@@ -29,11 +34,11 @@
         <p>JSON:</p>
         <textarea id="json" rows="5" cols="1"></textarea>
 
-        <button id="decrypt_button" type="button">Decrypt!</button>
+        <button onclick="sendDecryption()" id="decrypt_button" type="button">Decrypt!</button>
     </div>
 
     <p id="keys_paragraph">Keys</p>
-    <p id="decrypt_results">ghhjghjb<br>fasf<br>faf<br>faef<br>fefef<br>aefef<br>feffwwe<br>wefef</p>
+    <p id="decrypt_results"></p>
 </main>
 
 {% endblock %}

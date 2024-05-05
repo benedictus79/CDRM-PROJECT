@@ -9,6 +9,7 @@ div {
     grid-column-start: 4;
     grid-column-end: 7;
     justify-self: center;
+    margin-top: 20%;
 }
 
 #login_button {

@@ -42,5 +42,7 @@ div {
     width: auto;
     height: auto;
     border-image-slice: 1;
-    justify-content: center;
+    justify-self: center;
+    text-align: center;
+    padding: 5%;
 }
