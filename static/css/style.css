@@ -2,7 +2,7 @@ html {
     width: 100%;
     height: 100%;
     display: grid;
-    background-image: linear-gradient(120deg, #02004c, #000000);
+    background-image: linear-gradient(#02004c, #000000);
     background-size: cover;
 }
 
@@ -11,7 +11,7 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
-    background-image: linear-gradient(#02004c, #000000);
+    background-image: linear-gradient(120deg, #02004c, #000000);
     background-size: cover;
     grid-template-rows: auto 1fr auto;
     grid-template-columns: repeat(9, 1fr);

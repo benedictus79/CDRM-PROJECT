@@ -6,6 +6,11 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/cache.css') }}">
 {% endblock %}
 
+<!-- Extend JS to add JS for particular page -->
+{%  block js %}
+<script src="{{ url_for('static', filename='js/cache.js') }}"></script>
+{% endblock %}
+
 <!-- Main body block -->
 {% block main_body %}
 
@@ -21,7 +26,7 @@
         <br>
         <input type="text" id="cache_pssh" name="cache_pssh">
         <br>
-        <input type="submit" id="cache_submit" name="cache_submit" value="Submit">
+        <input type="button"  onclick="sendCache()" id="cache_submit" name="cache_submit" value="Submit">
     </form>
 
     <p id="cache_results">

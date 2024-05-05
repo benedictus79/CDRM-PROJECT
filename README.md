@@ -23,6 +23,6 @@
     > Linux - `source bin/activate`
 
  - Install python dependencies `pip install -r requirements.txt`
- - Place your .WVD file into the root of the directory
+ - Place your .WVD file into `/databases/WVDs`
  - Run the application `python main.py`
 

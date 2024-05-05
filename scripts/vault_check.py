@@ -6,41 +6,40 @@ import os
 # Define check database function
 def check_database(pssh: str):
 
-    # Connect the "key_cache.db" database
+    # Connect to DB
     dbconnection = sqlite3.connect(f"{os.getcwd()}/databases/key_cache.db")
 
-    # Create a cursor object
+    # Initialize a cursor object
     dbcursor = dbconnection.cursor()
 
-    # Match the entry by PSSH
+    # Find PSSH
     dbcursor.execute("SELECT keys FROM database WHERE pssh = :pssh", {"pssh": pssh})
 
-    # Fetch the entries
+    # Fetch all results
     vaultkeys = dbcursor.fetchall()
 
-    # Format the response if entries were found
+    # If any found
     if vaultkeys:
 
-        # String the dictionary entry
+        # Assign variable
         vaultkey = str(vaultkeys[0])
 
-        # Strip special characters
+        # Strip of sqlite special characters
         stripped_vault_key = vaultkey.strip(",'()")
 
-        # Remove double backslash with singles for new lines
+        # Remove double \\ for single \
         formatted_vault_key = stripped_vault_key.replace('\\n', '\n')
 
-        # Close the connection
+        # Close the connections
         dbconnection.close()
 
-        # Return the PSSH and keys
-        return pssh, formatted_vault_key
+        return formatted_vault_key
 
-    # If no keys match the PSSH entry
+    # If no keys found
     else:
 
         # Close the connection
         dbconnection.close()
 
-        # Return "Not found" string.
+        # Return not found
         return "Not found"
