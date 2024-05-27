@@ -1,3 +1,10 @@
+window.onload = getCache;
+
+function addLineBreaks(text) {
+    // Replace all occurrences of '\n' with '<br>'
+    return text.replace(/\n/g, '<br>');
+}
+
 // Define decrypt function
 
 function sendCache() {
@@ -33,11 +40,38 @@ function sendCache() {
                 .then(data => {
 
                     // Grab the message
-                    let message = data['Message']
+                    let message = addLineBreaks(data['Message'])
 
                     // Make fields visible and update with message
-                    document.getElementById("cache_results").style.display = 'Grid'
-                    document.getElementById("cache_results").textContent = message
+                    document.getElementById("cache_results_container").style.display = 'grid'
+                    document.getElementById("results_paragraph").style.justifySelf = 'center'
+                    document.getElementById("cache_results").innerHTML = message
+                })
+        })
+}
+
+function getCache() {
+
+    // Set request options
+    let requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // Send post request
+    fetch('/key_count', requestOptions)
+
+        // Process return object
+        .then(response => {
+            return response.json()
+
+                // Access JSON info
+                .then(data => {
+
+                    // Make fields visible and update with message
+                    document.getElementById("total_keys").innerHTML = data['Message']
                 })
         })
 }

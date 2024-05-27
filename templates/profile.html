@@ -1,0 +1,16 @@
+<!-- Extend the base HTML template -->
+{% extends "base.html" %}
+
+<!-- Extend CSS to add CSS for particular page -->
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+<!-- Main body block -->
+{% block main_body %}
+<main>
+
+</main>
+
+<!-- End main block -->
+{% endblock %}

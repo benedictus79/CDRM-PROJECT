@@ -1,21 +1,26 @@
 main {
-    grid-template-rows: auto 1fr;
-    grid-template-columns: repeat(9, 1fr);
+    display: grid;
+    grid-template-rows: auto 2fr;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10%;
 }
 
 h1 {
-    grid-column-start: 4;
-    grid-column-end: 7;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    display: grid;
     justify-self: center;
+    color: white;
 }
 
-div {
-    grid-row-start: 2;
-    grid-row-end: 3;
-    grid-column-start: 3;
-    grid-column-end: 8;
-    justify-self: center;
-    margin-top: 10%;
+.details_box {
+    display: grid;
+    color: white;
+    border-style: solid;
+    border-width: thin;
+    border-color: rgba(0, 0, 0, 0.3);
+    padding: 10%;
+    background-color: rgba(0, 0, 0, 0.1);
+    height: auto;
+    margin-bottom: 5%;
+    border-radius: 2%;
 }

@@ -21,15 +21,17 @@
 
     <!-- Header -->
     <header>
-        <a id="logo_href" href="{{ url_for('main_page') }}"> <img class="header_logo" src="{{ url_for('static', filename='assets/logo.png') }}"> </a>
-        <!-- Navbar -->
-        <nav>
-            <a id="main_href" class="navi" href="{{ url_for('main_page') }}">Home</a>
-            <a id="cache_href" class="navi" href="{{ url_for('cache_page') }}">Cache</a>
-            <a id="faq_href" class="navi" href="{{ url_for('faq_page') }}">FAQ</a>
-            <a id="login_href" class="navi" href="{{ url_for('login_page') }}">Login</a>
-        </nav>
+        CDRM-Project 2.0
     </header>
+
+    <!-- Navbar -->
+    <nav>
+        <a id="main_href" class="navi" href="{{ url_for('main_page') }}">Home</a>
+        <a id="cache_href" class="navi" href="{{ url_for('cache_page') }}">Cache</a>
+        <a id="api" class="navi" href="{{ url_for('api_page') }}">API</a>
+        <a id="faq_href" class="navi" href="{{ url_for('faq_page') }}">FAQ</a>
+        <a id="login_href" class="navi" href="{{ url_for('login_page') }}">Login</a>
+    </nav>
 
     <!-- Main body -->
     {% block main_body %}

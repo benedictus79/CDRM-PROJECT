@@ -20,7 +20,7 @@ def clean_my_dict(dirty_dict: str = None):
 
 # Defining decrypt function
 def decrypt_content(in_pssh: str = None, license_url: str = None,
-                    headers: str = None, json_data: str = None, wvd: str = None):
+                    headers: str = None, json_data: str = None, cookies_data: str = None, wvd: str = None):
     # prepare pssh
     try:
         pssh = PSSH(in_pssh)
@@ -44,7 +44,6 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
     if headers != '':
         try:
             headers = ast.literal_eval(clean_my_dict(dirty_dict=headers))
-            print(headers)
         except:
             return {
                 'Message': 'Headers could not be loaded correctly, please make sure they are formatted in python dictionary'
@@ -53,11 +52,18 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
     if json_data != '':
         try:
             json_data = ast.literal_eval(clean_my_dict(dirty_dict=json_data))
-            print(json_data)
         except:
             return {
                 'Message': 'JSON could not be loaded correctly, please make sure they are formatted in python dictionary format'
             }
+    if cookies_data != '':
+        try:
+            cookies_data = ast.literal_eval(clean_my_dict(dirty_dict=cookies_data))
+        except:
+            return {
+                'Message': 'Cookies could not be loaded correctly, please make sure they are formatted in python dictionary format'
+            }
+
 
     # Try statement here, probably the most common point of failure
     try:
@@ -66,6 +72,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
             url=license_url,
             headers=headers,
             json=json_data,
+            cookies=cookies_data,
             data=challenge
         )
     except Exception as error:

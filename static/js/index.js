@@ -1,3 +1,8 @@
+function addLineBreaks(text) {
+    // Replace all occurrences of '\n' with '<br>'
+    return text.replace(/\n/g, '<br>');
+}
+
 // Define decrypt function
 
 function sendDecryption() {
@@ -14,12 +19,16 @@ function sendDecryption() {
     // Declare JSON variable
     let json = document.getElementById("json");
 
+    // Declare Cookies variable
+    let cookies = document.getElementById("cookies");
+
     // Declare JSON dictionary and add the values
     let json_dict = {
         'PSSH': pssh.value,
         'License URL': license_url.value,
         'Headers': headers.value,
-        'JSON': json.value
+        'JSON': json.value,
+        'Cookies': cookies.value
     }
 
     // Reset all the fields
@@ -27,12 +36,13 @@ function sendDecryption() {
     license_url.value = ''
     headers.value = ''
     json.value = ''
+    cookies.value = ''
 
     // Set request options
     let requestOptions = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(json_dict)
     }
@@ -48,12 +58,11 @@ function sendDecryption() {
                 .then(data => {
 
                     // Grab the message
-                    let message = data['Message']
+                    let message = addLineBreaks(data['Message'])
 
                     // Make fields visible and update with message
-                    document.getElementById("keys_paragraph").style.display = 'Grid'
-                    document.getElementById("decrypt_results").style.display = 'Grid'
-                    document.getElementById("decrypt_results").textContent = message
+                    document.getElementById("results").style.display = 'grid'
+                    document.getElementById("decrypt_results").innerHTML = message
                 })
         })
 }

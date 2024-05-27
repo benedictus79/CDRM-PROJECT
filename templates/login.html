@@ -6,6 +6,11 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
+<!-- Extend JS to add JS for particular page -->
+{%  block js %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}
+
 <!-- Main body block -->
 {% block main_body %}
 <main>
@@ -20,9 +25,10 @@
         <input type="text" id="password">
         <br>
         <div id="register_buttons">
-            <input id="login_button" type="button" name="submit" value="Log in">
-            <input id="register_button" type="button" value="Register">
+            <input id="login_button" onclick="sendLogin()" type="button" name="submit" value="Log in">
+            <input id="register_button" onclick="sendRegister()" type="button" value="Register">
         </div>
+        <p id="error_message_holder">Error message holder</p>
     </div>
 
 </main>

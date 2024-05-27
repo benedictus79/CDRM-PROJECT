@@ -1,70 +1,73 @@
 main {
     display: grid;
-    grid-column-start: 1;
-    grid-column-end: 10;
-    grid-row-start: 2;
-    grid-row-end: 9;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: auto 1fr auto auto;
+    grid-template-rows: auto auto auto;
+    margin-top: 5%;
+    margin-bottom: 3%;
 }
 
 h1 {
     display: grid;
-    grid-row-start: 1;
-    grid-row-end: 1;
-    grid-column-start: 4;
-    grid-column-end: 7;
-    align-self: end;
-}
-
-div {
-    display: grid;
-    grid-row-start: 2;
-    grid-row-end: 5;
-    grid-column-start: 3;
-    grid-column-end: 8;
-}
-
-textarea {
-    padding: 8px;
-    border: 1px solid #4b84bf7a;
-    background: #b3b3b32e;
+    grid-auto-rows: auto;
+    justify-self: center;
     color: white;
-    border-radius: 3px;
 }
 
-textarea:hover {
-    box-shadow: 0px 0px 13px 2px #2ca9c9;
-    transition: 0.5s ease;
+#decrypt_form {
+    display: grid;
+    grid-template-rows: auto auto auto auto auto auto;
+    width: 50%;
+    justify-self: center;
+    border-style: solid;
+    padding: 1%;
+    border-radius: 2%;
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.1);
+    margin-bottom: 3%;
+    color: white;
 }
 
-.lock-icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-image: url('https://www.svgrepo.com/show/136946/lock.svg');
-    background-size: cover;
-    margin-right: 5px;
+#index_pssh,
+#license_url,
+#headers,
+#json,
+#cookies {
+    resize: none; /* Prevent textarea from being resizable */
+    overflow: auto; /* Enable scrolling if content overflows */
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+    margin: 1%;
+}
+
+#decrypt_button {
+    width: 25%;
+    justify-self: center;
+    margin-top: 2%;
+}
+
+#results {
+    display: none;
+    border-style: solid;
+    border-radius: 2%;
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 50%;
+    justify-self: center;
+    margin-bottom: 3%;
 }
 
 #keys_paragraph {
-    display: none;
-    margin-top: 15%;
-    grid-column-start: 4;
-    grid-column-end: 7;
+    display: grid;
+    grid-template-rows: auto;
     justify-self: center;
+    font-size: xx-large;
+    color: white;
 }
 
 #decrypt_results {
-    display: none;
-    grid-column-start: 3;
-    grid-column-end: 8;
-    border-style: solid;
-    border-image: linear-gradient(#191d59, #02004c);
-    width: auto;
-    height: auto;
-    border-image-slice: 1;
+    display: grid;
+    grid-template-rows: auto;
     justify-self: center;
     text-align: center;
-    padding: 5%;
+    color: white;
+    width: 100%;
 }

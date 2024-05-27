@@ -1,61 +1,40 @@
 main {
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: 1fr;
-}
-
-div {
-    grid-row-start: 1;
-    grid-row-end: 2;
-    grid-column-start: 4;
-    grid-column-end: 7;
-    justify-self: center;
-    margin-top: 20%;
-    width: 100%
+    display: grid;
 }
 
 #login_form {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    align-content: center;
+    align-self: center;
+    justify-self: center;
+    grid-template-rows: auto auto auto auto auto auto;
+    width: 25%;
+    color: white;
+    border-style: solid;
+    border-width: thin;
+    border-radius: 2%;
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2%;
 }
 
-#username_label {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    align-self: end;
+#username_label, #username, #password_label, #password {
+    margin-bottom: 1%;
+    justify-self: center;
 }
 
-#username {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    height: 50%;
-}
-
-#password_label {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 3;
-    grid-row-end: 4;
-    align-self: end;
-}
-
-#password {
-    grid-row-start: 4;
-    grid-row-end: 5;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    height: 50%;
+#username, #password {
+    width: 50%;
 }
 
 #register_buttons {
     display: grid;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 5;
-    grid-row-end: 6;
-    grid-template-columns: repeat(2, 1fr);
-    align-self: start;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1%;
+    width: 50%;
+    justify-self: center;
+}
+
+#error_message_holder {
+    display: none;
 }

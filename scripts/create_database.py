@@ -28,20 +28,20 @@ def create_database():
         # Close the connection
         dbconnection.close()
 
-        # Check to see if a database exists in databases directory, if not create it
-        if not os.path.isfile("users.db"):
-            # Connect / Create "key_cache.db"
-            dbconnection = sqlite3.connect("users.db")
+    # Check to see if a database exists in databases directory, if not create it
+    if not os.path.isfile("users.db"):
+        # Connect / Create "key_cache.db"
+        dbconnection = sqlite3.connect("users.db")
 
-            # Create cursor
-            dbcursor = dbconnection.cursor()
+        # Create cursor
+        dbcursor = dbconnection.cursor()
 
-            # Create table through the cursor
-            dbcursor.execute('CREATE TABLE IF NOT EXISTS "DATABASE" ( "username" TEXT, "hashedpassword" TEXT, '
+        # Create table through the cursor
+        dbcursor.execute('CREATE TABLE IF NOT EXISTS "DATABASE" ( "username" TEXT, "hashedpassword" TEXT, '
                              '"cached_keys" TEXT, PRIMARY KEY("username") )')
 
-            # Close the connection
-            dbconnection.close()
+        # Close the connection
+        dbconnection.close()
 
     # Change back to root directory
     os.chdir(os.path.join(os.getcwd(), ".."))

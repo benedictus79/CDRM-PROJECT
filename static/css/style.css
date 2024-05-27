@@ -1,133 +1,93 @@
-html {
+html, body {
     width: 100%;
     height: 100%;
-    display: grid;
-    background-image: linear-gradient(#02004c, #000000);
-    background-size: cover;
+    margin: 0; /* Reset default margin */
+    padding: 0; /* Reset default padding */
 }
 
 body {
     display: grid;
-    width: 100%;
-    height: 100%;
+    grid-template-rows: auto auto 2fr auto;
     margin: 0;
-    background-image: linear-gradient(120deg, #02004c, #000000);
+    padding: 0;
+}
+
+/* Set background image */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1; /* Ensure the background is behind other content */
+    background-image: url("../assets/background.png");
     background-size: cover;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: repeat(9, 1fr);
-    color: white;
+    background-repeat: no-repeat;
+    background-position: center;
 }
-
-a {
-    color: white;
-    text-decoration: none;
-}
-
 
 header {
     display: grid;
-    grid-column-start: 1;
-    grid-column-end: 10;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-}
-
-#logo_href{
-    display: grid;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    grid-column-start: 4;
-    grid-column-end: 7;
-    justify-self: center;
+    width: 100%;
+    padding-bottom: 0.2%;
+    justify-content: center;
+    align-items: center;
+    font-size: xxx-large;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+    border-bottom-style: solid;
+    border-width: thin;
+    border-color: rgba(0, 0, 0, 0.3);
 }
 
 nav {
-    display: grid;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    grid-column-start: 1;
-    grid-column-end: 10;
-    grid-template-columns: repeat(9, 1fr);
-}
-
-#main_href {
-    display: grid;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    display: flex;
+    justify-content: space-evenly;
     justify-self: center;
     align-self: center;
+    margin-top: 1%;
+    border-style: solid;
+    border-width: thin;
+    border-color: rgba(0, 0, 0, 0.3);
+    border-radius: 2%;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 50%;
 }
 
-#cache_href{
-    display: grid;
-    grid-column-start: 4;
-    grid-column-end: 5;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    justify-self: center;
-    align-self: center;
-}
-
-#faq_href {
-    display: grid;
-    grid-column-start: 6;
-    grid-column-end: 7;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    justify-self: center;
-    align-self: center;
-}
-
-#login_href {
-    display: grid;
-    grid-column-start: 8;
-    grid-column-end: 9;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    justify-self: center;
-    align-self: center;
-}
-
-main {
-    display: grid;
-    grid-column-start: 1;
-    grid-column-end: 10;
-    grid-row-start: 2;
-    grid-row-end: 9;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(9, 1fr);
+a {
+    text-decoration: none;
+    color: white;
 }
 
 footer {
     display: grid;
-    margin-top: 10%;
-    grid-column-start: 1;
-    grid-column-end: 10;
-    grid-row-start: 9;
-    grid-row-end: 10;
+    height: 100%;
     grid-template-rows: 1fr;
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: 1fr 1fr;
+    background-color: rgba(0, 0, 0, 0.1);
+    align-self: end;
+    border-top-style: solid;
+    border-top-color: rgba(255, 255, 255, 0.1);
+    border-width: thin;
 }
 
 #flink1 {
     display: grid;
-    grid-column-start: 3;
-    grid-column-end: 5;
-    grid-row-start: 9;
-    grid-row-end: 10;
-    align-self: end;
-
+    grid-column-start: 1;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-end: 2;
+    justify-self: center;
+    align-self: center;
 }
 
 #flink2 {
     display: grid;
-    grid-column-start: 7;
-    grid-column-end: 9;
-    grid-row-start: 9;
-    grid-row-end: 10;
-    align-self: end;
+    grid-column-start: 2;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-end: 3;
+    justify-self: center;
+    align-self: center;
 }
