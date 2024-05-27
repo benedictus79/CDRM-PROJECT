@@ -41,9 +41,18 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
     # Generate the challenge
     challenge = cdm.get_license_challenge(session_id, pssh)
 
+    challenge_not_in_data = False
+
     if headers != '':
         try:
             headers = ast.literal_eval(clean_my_dict(dirty_dict=headers))
+
+            # Iterate through the dictionary
+            for key, value in headers.items():
+                # Check if the value is '!Challenge'
+                if value == '!Challenge':
+                    # Replace the value with something else
+                    headers[key] = base64.b64encode(challenge).decode()
         except:
             return {
                 'Message': 'Headers could not be loaded correctly, please make sure they are formatted in python dictionary'
@@ -52,6 +61,12 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
     if json_data != '':
         try:
             json_data = ast.literal_eval(clean_my_dict(dirty_dict=json_data))
+            # Iterate through the dictionary
+            for key, value in json_data.items():
+                # Check if the value is '!Challenge'
+                if value == '!Challenge':
+                    # Replace the value with something else
+                    json_data[key] = base64.b64encode(challenge).decode()
         except:
             return {
                 'Message': 'JSON could not be loaded correctly, please make sure they are formatted in python dictionary format'
@@ -59,6 +74,12 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
     if cookies_data != '':
         try:
             cookies_data = ast.literal_eval(clean_my_dict(dirty_dict=cookies_data))
+            # Iterate through the dictionary
+            for key, value in cookies_data.items():
+                # Check if the value is '!Challenge'
+                if value == '!Challenge':
+                    # Replace the value with something else
+                    cookies_data[key] = base64.b64encode(challenge).decode()
         except:
             return {
                 'Message': 'Cookies could not be loaded correctly, please make sure they are formatted in python dictionary format'
@@ -67,14 +88,25 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
 
     # Try statement here, probably the most common point of failure
     try:
-        # send license challenge
-        license = requests.post(
-            url=license_url,
-            headers=headers,
-            json=json_data,
-            cookies=cookies_data,
-            data=challenge
-        )
+        if challenge_not_in_data == False:
+
+            # send license challenge
+            license = requests.post(
+                url=license_url,
+                headers=headers,
+                json=json_data,
+                cookies=cookies_data,
+                data=challenge
+            )
+        else:
+            license = requests.post(
+                url=license_url,
+                headers=headers,
+                json=json_data,
+                cookies=cookies_data,
+            )
+
+
     except Exception as error:
         return {
             'Message': str(error)
