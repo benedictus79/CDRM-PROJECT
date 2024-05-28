@@ -1,5 +1,7 @@
 # import dependencies
 import base64
+import json
+
 from pywidevine import PSSH
 from pywidevine import Cdm
 from pywidevine import Device
@@ -20,7 +22,7 @@ def clean_my_dict(dirty_dict: str = None):
 
 # Defining decrypt function
 def decrypt_content(in_pssh: str = None, license_url: str = None,
-                    headers: str = None, json_data: str = None, cookies_data: str = None, wvd: str = None):
+                    headers: str = None, json_data: str = None, cookies_data: str = None, input_data: str = None, wvd: str = None):
     # prepare pssh
     try:
         pssh = PSSH(in_pssh)
@@ -42,6 +44,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
     challenge = cdm.get_license_challenge(session_id, pssh)
 
     challenge_not_in_data = False
+    extra_data_challenge = False
 
     if headers != '':
         try:
@@ -53,6 +56,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                 if value == '!Challenge':
                     # Replace the value with something else
                     headers[key] = base64.b64encode(challenge).decode()
+                    challenge_not_in_data = True
         except:
             return {
                 'Message': 'Headers could not be loaded correctly, please make sure they are formatted in python dictionary'
@@ -67,10 +71,12 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                 if value == '!Challenge':
                     # Replace the value with something else
                     json_data[key] = base64.b64encode(challenge).decode()
+                    challenge_not_in_data  = True
         except:
             return {
                 'Message': 'JSON could not be loaded correctly, please make sure they are formatted in python dictionary format'
             }
+
     if cookies_data != '':
         try:
             cookies_data = ast.literal_eval(clean_my_dict(dirty_dict=cookies_data))
@@ -80,31 +86,65 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                 if value == '!Challenge':
                     # Replace the value with something else
                     cookies_data[key] = base64.b64encode(challenge).decode()
+                    challenge_not_in_data = True
         except:
             return {
                 'Message': 'Cookies could not be loaded correctly, please make sure they are formatted in python dictionary format'
             }
 
+    if input_data != '':
+        try:
+            input_data = ast.literal_eval(clean_my_dict(dirty_dict=input_data))
+            # Iterate through the dictionary
+            for key, value in input_data.items():
+                # Check if the value is '!Challenge'
+                if value == '!Challenge':
+                    # Replace the value with something else
+                    input_data[key] = base64.b64encode(challenge).decode()
+                    extra_data_challenge = True
+        except:
+            return {
+                'Message': 'Data could not be loaded correctly, please make sure they are formatted in python dictionary format'
+            }
 
     # Try statement here, probably the most common point of failure
     try:
-        if challenge_not_in_data == False:
+        if extra_data_challenge == False:
+            if challenge_not_in_data == False:
 
+                # send license challenge
+                license = requests.post(
+                    url=license_url,
+                    headers=headers,
+                    json=json_data,
+                    cookies=cookies_data,
+                    data=challenge
+                )
+            else:
+                license = requests.post(
+                    url=license_url,
+                    headers=headers,
+                    json=json_data,
+                    cookies=cookies_data,
+                )
+        else:
+            print("Extra challenge!!")
             # send license challenge
             license = requests.post(
                 url=license_url,
                 headers=headers,
                 json=json_data,
                 cookies=cookies_data,
-                data=challenge
+                data=input_data
             )
-        else:
-            license = requests.post(
-                url=license_url,
-                headers=headers,
-                json=json_data,
-                cookies=cookies_data,
-            )
+            if license.status_code != 200:
+                license = requests.post(
+                    url=license_url,
+                    headers=headers,
+                    json=json_data,
+                    cookies=cookies_data,
+                    data=json.dumps(input_data)
+                )
 
 
     except Exception as error:
@@ -120,14 +160,18 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
             cdm.parse_license(session_id, license.json().get('license'))
         except:
             try:
-                cdm.parse_license(session_id, license.json().get('licenseData'))
+                replaced_license = license.json()["license"].replace("-", "+").replace("_", "/")
+                cdm.parse_license(session_id, replaced_license)
             except:
                 try:
-                    cdm.parse_license(session_id, license.json().get('widevine2License'))
-                except Exception as error:
-                    return {
-                        'Message': str(error)
-                    }
+                    cdm.parse_license(session_id, license.json().get('licenseData'))
+                except:
+                    try:
+                        cdm.parse_license(session_id, license.json().get('widevine2License'))
+                    except Exception as error:
+                        return {
+                            'Message': str(error)
+                        }
 
     # assign variable for returned keys
     returned_keys = ""

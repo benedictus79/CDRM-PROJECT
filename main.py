@@ -32,6 +32,7 @@ def main_page():
             headers=request.json['Headers'],
             json_data=request.json['JSON'],
             cookies_data=request.json['Cookies'],
+            input_data=request.json['Data'],
             wvd=WVD
         )
         return jsonify(decrypt_response)

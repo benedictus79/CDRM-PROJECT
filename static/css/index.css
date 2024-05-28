@@ -30,7 +30,8 @@ h1 {
 #license_url,
 #headers,
 #json,
-#cookies {
+#cookies,
+#data {
     resize: none; /* Prevent textarea from being resizable */
     overflow: auto; /* Enable scrolling if content overflows */
     background-color: rgba(0, 0, 0, 0.1);

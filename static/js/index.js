@@ -22,13 +22,17 @@ function sendDecryption() {
     // Declare Cookies variable
     let cookies = document.getElementById("cookies");
 
+    // Declare data variable
+    let data = document.getElementById("data");
+
     // Declare JSON dictionary and add the values
     let json_dict = {
         'PSSH': pssh.value,
         'License URL': license_url.value,
         'Headers': headers.value,
         'JSON': json.value,
-        'Cookies': cookies.value
+        'Cookies': cookies.value,
+        'Data': data.value
     }
 
     // Reset all the fields
@@ -37,6 +41,7 @@ function sendDecryption() {
     headers.value = ''
     json.value = ''
     cookies.value = ''
+    data.value = ''
 
     // Set request options
     let requestOptions = {

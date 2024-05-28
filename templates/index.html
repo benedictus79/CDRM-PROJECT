@@ -23,19 +23,22 @@
     <!-- Forms for entering widevine license request information -->
     <div id="decrypt_form">
         <label for="index_pssh">PSSH:</label>
-        <textarea id="index_pssh" rows="1" cols="1"></textarea>
+        <textarea id="index_pssh" onclick="this.placeholder =''" rows="1" cols="1" placeholder="AAAAW3Bzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAADsIARIQ62dqu8s0Xpa7z2FmMPGj2hoNd2lkZXZpbmVfdGVzdCIQZmtqM2xqYVNkZmFsa3IzaioCSEQyAA=="></textarea>
 
         <label for="license_url">License URL:</label>
-        <textarea id="license_url" rows="1" cols="1"></textarea>
+        <textarea id="license_url" onclick="this.placeholder =''" rows="1" cols="1" placeholder="https://cwip-shaka-proxy.appspot.com/no_auth"></textarea>
 
         <label for="headers">Headers:</label>
-        <textarea id="headers" rows="5" cols="1"></textarea>
+        <textarea id="headers" onclick="this.placeholder =''" rows="5" cols="1" placeholder="{'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0'}"></textarea>
 
         <label for="json">JSON:</label>
         <textarea id="json" rows="5" cols="1"></textarea>
 
         <label for="cookies">Cookies:</label>
         <textarea id="cookies" rows="5" cols="1"></textarea>
+
+        <label for="data">Data:</label>
+        <textarea id="data" rows="2" cols="1"></textarea>
 
         <button onclick="sendDecryption()" id="decrypt_button" type="button"><span class="lock-icon"></span>Decrypt!</button>
     </div>
