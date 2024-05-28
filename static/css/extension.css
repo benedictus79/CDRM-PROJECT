@@ -32,10 +32,6 @@ pre {
     width: auto;
 }
 
-a {
-    color: gray;
-}
-
 #ex_a {
     color: black;
 }
@@ -47,4 +43,8 @@ a {
     background-color: rgba(255, 255, 255, 0.3);
     border-color: rgba(0, 0, 0, 0.3);
 
+}
+
+.fox {
+    color: gray;
 }
