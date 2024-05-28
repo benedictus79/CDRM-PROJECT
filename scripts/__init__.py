@@ -6,3 +6,4 @@ from . import key_cache
 from . import check_user
 from . import gen_hash
 from . import key_count
+from . import extension_decrypt

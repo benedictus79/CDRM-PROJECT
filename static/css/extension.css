@@ -1,0 +1,50 @@
+main {
+    display: grid;
+    grid-template-rows: auto auto 2fr;
+    margin-top: 10%;
+}
+
+h1 {
+    color: white;
+    justify-self: center;
+}
+
+h2 {
+    color: white;
+    justify-self: center;
+    border-bottom-style: solid;
+    border-bottom-width: thin;
+}
+
+div {
+    display: grid;
+}
+
+pre {
+    color: white;
+    justify-self: center;
+    border-style: solid;
+    text-align: left;
+    border-radius: 2%;
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 1%;
+    width: auto;
+}
+
+a {
+    color: gray;
+}
+
+#ex_a {
+    color: black;
+}
+
+#ex_button {
+    border-style: solid;
+    border-width: thin;
+    border-radius: 2%;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(0, 0, 0, 0.3);
+
+}

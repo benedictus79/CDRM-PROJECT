@@ -1,7 +1,8 @@
 # Import dependencies
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
 import scripts
 import uuid
+import json
 
 # Create database if it doesn't exist
 scripts.create_database.create_database()
@@ -71,6 +72,43 @@ def faq_page():
 def api_page():
     if request.method == 'GET':
         return render_template('api.html')
+    elif request.method == 'POST':
+        return
+
+
+@app.route("/extension", methods=['GET', 'POST'])
+def extension_page():
+    if request.method == 'GET':
+        return render_template('extension.html')
+    elif request.method == 'POST':
+        # Get the JSON data from the request
+        data = json.loads(request.data.decode())
+
+        # Get the PSSH
+        pssh = data['PSSH']
+
+        # Get the license URL
+        lic_url = data['License URL']
+
+        # Get the headers
+        headers = data['Headers']
+        headers = json.loads(headers)
+
+        # Get the MPD url
+        json_data = data['JSON']
+
+        try:
+            keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers, wvd=WVD)
+            return {'Message': f'{keys}'}
+        except Exception as error:
+            return {"Message": [f'{error}']}
+
+
+@app.route("/download-extension", methods=['GET', 'POST'])
+def download_extension_page():
+    if request.method == 'GET':
+        file_path = 'static/assets/wvg-next-cdrm.zip'
+        return send_file(file_path, as_attachment=True)
     elif request.method == 'POST':
         return
 
