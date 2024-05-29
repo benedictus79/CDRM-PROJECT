@@ -106,11 +106,20 @@ def extension_page():
         # Get the MPD url
         json_data = data['JSON']
 
-        try:
-            keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers, wvd=WVD)
-            return {'Message': f'{keys}'}
-        except Exception as error:
-            return {"Message": [f'{error}']}
+        if data['Scheme'] == 'CommonWV':
+            try:
+                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
+                                                                 wvd=WVD, scheme=data['Scheme'])
+                return {'Message': f'{keys}'}
+            except Exception as error:
+                return {"Message": [f'{error}']}
+        if data['Scheme'] == 'Amazon':
+            try:
+                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
+                                                                 wvd=WVD, scheme=data['Scheme'])
+                return {'Message': f'{keys}'}
+            except Exception as error:
+                return {"Message": [f'{error}']}
 
 
 @app.route("/download-extension", methods=['GET', 'POST'])
