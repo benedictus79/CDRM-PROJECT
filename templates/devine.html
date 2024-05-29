@@ -1,0 +1,23 @@
+<!-- Extend the base HTML template -->
+{% extends "base.html" %}
+
+<!-- Extend CSS to add CSS for particular page -->
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/devine.css') }}">
+{% endblock %}
+
+<!-- Main body block -->
+{% block main_body %}
+<main>
+
+<h1>Devine</h1>
+<p>
+    <a class="dlinks" href="https://github.com/devine-dl/devine">Devine</a> is a Modular Movie, TV, and Music Archival Software, service scripts can be found on <a class="dlinks" href="https://cdm-project.com/explore/repos">The CDM-Project</a>
+    <br>
+    Along with the extension, CDRM-Project is compatible with devine's remote CDM option out of the box, add this to your devine.yaml
+</p>
+<p id="remote_cdm">remote_cdm:<br />&nbsp;&nbsp;&nbsp; - name: "CDM_Project_API"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; device_type: ANDROID<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; system_id: 4445<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; security_level: 3<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; host: "https://cdrm-project.com/devine"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; secret: "CDRM-Project"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; device_name: "CDM"</p>
+</main>
+
+<!-- End main block -->
+{% endblock %}

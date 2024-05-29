@@ -1,7 +1,7 @@
 main {
     display: grid;
     grid-template-rows: auto auto 2fr;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 h1 {

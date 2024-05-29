@@ -1,8 +1,15 @@
 # Import dependencies
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file, Response, current_app
 import scripts
 import uuid
 import json
+import base64
+from pywidevine import __version__
+from pywidevine.pssh import PSSH
+from pywidevine.cdm import Cdm
+from pywidevine.device import Device
+from pywidevine.exceptions import (InvalidContext, InvalidInitData, InvalidLicenseMessage, InvalidLicenseType,
+                                   InvalidSession, SignatureMismatch, TooManySessions)
 
 # Create database if it doesn't exist
 scripts.create_database.create_database()
@@ -19,6 +26,8 @@ app = Flask(__name__, template_folder='templates', static_folder='static', stati
 
 # Create a secret key for logins
 app.secret_key = str(uuid.uuid4())
+
+user_info = {}
 
 
 # Route for root '/'
@@ -165,6 +174,178 @@ def profile():
     if request.method == 'GET':
         return render_template('profile.html')
 
+# Route for '/devine'
+@app.route("/devine", methods=['GET', 'POST', 'HEAD'])
+def devine_page():
+    if request.method == 'GET':
+        return render_template('devine.html')
+    if request.method == 'POST':
+        return
+    if request.method == 'HEAD':
+        response = Response(status=200)
+        response.headers.update({
+            "Server": f"https://github.com/devine-dl/pywidevine serve v{__version__}"
+        })
+        return response
+
+
+# Route for '/{device}/open'
+@app.route("/devine/<device>/open", methods=['GET'])
+def device_open(device):
+    if request.method == 'GET':
+        cdm_device = Device.load(WVD)
+        cdm = current_app.config['cdms'] = Cdm.from_device(cdm_device)
+        session_id = cdm.open()
+        response_data = {
+            "status": 200,
+            "message": "Success",
+            "data": {
+                "session_id": session_id.hex(),
+                "device": {
+                    "system_id": cdm.system_id,
+                    "security_level": cdm.security_level
+                    }
+                }
+            }
+        return jsonify(response_data)
+
+# Route for '/{device}/set_service_certificate'
+@app.route("/devine/<device>/set_service_certificate", methods=['POST'])
+def set_cert(device):
+    if request.method == 'POST':
+        cdm = current_app.config["cdms"]
+        body = request.json
+
+        # get session id
+        session_id = bytes.fromhex(body["session_id"])
+
+        # set service certificate
+        certificate = body.get("certificate")
+
+        provider_id = cdm.set_service_certificate(session_id, certificate)
+
+        response_data = {
+            "status": 200,
+            "message": f"Successfully {['set', 'unset'][not certificate]} the Service Certificate.",
+            "data": {
+                "provider_id": provider_id
+            }
+        }
+
+        return jsonify(response_data)
+
+
+@app.route("/devine/<device>/get_license_challenge/<licensetype>", methods=['POST'])
+def get_license_challenge_page(device, licensetype):
+    if request.method == 'POST':
+        cdm = current_app.config["cdms"]
+
+        body = request.json
+
+        session_id = bytes.fromhex(body["session_id"])
+
+        privacy_mode = body.get("privacy_mode", True)
+
+        current_app.config['PSSH'] = body['init_data']
+        init_data = PSSH(body["init_data"])
+
+        license_request = cdm.get_license_challenge(
+            session_id=session_id,
+            pssh=init_data,
+            license_type=licensetype,
+            privacy_mode=privacy_mode
+        )
+
+        results = {
+            "status": 200,
+            "message": "Success",
+            "data": {
+                "challenge_b64": base64.b64encode(license_request).decode()
+            }
+        }
+
+        return jsonify(results)
+
+@app.route("/devine/<device>/parse_license", methods=['POST'])
+def parse_license(device):
+    if request.method == 'POST':
+        cdm = current_app.config["cdms"]
+
+        body = request.json
+
+        session_id = bytes.fromhex(body["session_id"])
+
+        cdm.parse_license(session_id, body["license_message"])
+
+        results = {
+            "status": 200,
+            "message": "Successfully parsed and loaded the Keys from the License message."
+        }
+
+        return jsonify(results)
+
+@app.route("/devine/<device>/get_keys/<key_type>", methods=['POST'])
+def get_keys(device, key_type):
+    if request.method == 'POST':
+        cdm = current_app.config["cdms"]
+
+        body = request.json
+
+        session_id = bytes.fromhex(body["session_id"])
+
+        if key_type == "ALL":
+            key_type = None
+
+        keys = cdm.get_keys(session_id, key_type)
+        returned_keys = ""
+        for key in cdm.get_keys(session_id):
+            if key.type != "SIGNING":
+                returned_keys += f"{key.kid.hex}:{key.key.hex()}\n"
+
+        keys_json = [
+            {
+                "key_id": key.kid.hex,
+                "key": key.key.hex(),
+                "type": key.type,
+                "permissions": key.permissions,
+            }
+            for key in keys
+            if not key_type or key.type == key_type
+        ]
+
+        results = {
+            "status": 200,
+            "message": "Success",
+            "data": {
+                "keys": keys_json
+            }
+        }
+
+        scripts.key_cache.cache_keys(pssh=current_app.config['PSSH'], keys=returned_keys)
+
+        return jsonify(results)
+
+@app.route("/devine/<device>/close/<session_id>", methods=['GET'])
+def close_session(device, session_id):
+    if request.method == 'GET':
+        cdm = current_app.config["cdms"]
+
+        session_id = bytes.fromhex(session_id)
+
+        cdm.close(session_id)
+
+        results = {
+            "status": 200,
+            "message": f"Successfully closed Session '{session_id.hex()}'."
+        }
+
+        return jsonify(results)
+
+
+
+
 # If the script is called directly, start the flask app.
 if __name__ == '__main__':
+    cdm = Cdm.from_device(Device.load(WVD))
+    print(f'CDM System ID: {cdm.system_id}')
     app.run(debug=True)

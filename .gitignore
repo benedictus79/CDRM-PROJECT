@@ -6,3 +6,4 @@
 /package-lock.json
 /tailwind.config.js
 /databases/users.db
+*.pyc
