@@ -8,7 +8,7 @@ import base64
 
 
 # Defining decrypt function
-def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict = None, wvd: str = None, scheme: str = None):
+def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict = None, wvd: str = None, scheme: str = None, proxy: str = None,):
 
     # prepare pssh
     pssh = PSSH(in_pssh)
@@ -30,7 +30,8 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
         license = requests.post(
             url=license_url,
             headers=headers,
-            data=challenge
+            data=challenge,
+            proxies=proxy,
         )
 
         # Parse the license if it comes back in plain bytes
@@ -70,7 +71,8 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
             data={
                 'widevine2Challenge': f'{base64.b64encode(challenge).decode()}',
                 'includeHdcpTestKeyInLicense': 'true',
-            }
+            },
+            proxies=proxy
         )
 
         # Parse the license if it comes back in plain bytes

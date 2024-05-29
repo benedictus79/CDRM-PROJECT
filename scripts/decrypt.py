@@ -22,7 +22,7 @@ def clean_my_dict(dirty_dict: str = None):
 
 # Defining decrypt function
 def decrypt_content(in_pssh: str = None, license_url: str = None,
-                    headers: str = None, json_data: str = None, cookies_data: str = None, input_data: str = None, wvd: str = None):
+                    headers: str = None, json_data: str = None, cookies_data: str = None, input_data: str = None, wvd: str = None, proxy: str = None,):
     # prepare pssh
     try:
         pssh = PSSH(in_pssh)
@@ -118,7 +118,8 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                     headers=headers,
                     json=json_data,
                     cookies=cookies_data,
-                    data=challenge
+                    data=challenge,
+                    proxies=proxy
                 )
             else:
                 license = requests.post(
@@ -126,6 +127,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                     headers=headers,
                     json=json_data,
                     cookies=cookies_data,
+                    proxies=proxy
                 )
         else:
             print("Extra challenge!!")
@@ -135,7 +137,8 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                 headers=headers,
                 json=json_data,
                 cookies=cookies_data,
-                data=input_data
+                data=input_data,
+                proxies=proxy
             )
             if license.status_code != 200:
                 license = requests.post(
@@ -143,7 +146,8 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                     headers=headers,
                     json=json_data,
                     cookies=cookies_data,
-                    data=json.dumps(input_data)
+                    data=json.dumps(input_data),
+                    proxies=proxy
                 )
 
 

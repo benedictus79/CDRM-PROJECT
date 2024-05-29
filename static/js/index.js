@@ -13,6 +13,9 @@ function sendDecryption() {
     // Declare License URL variable
     let license_url = document.getElementById("license_url");
 
+    // Declare Proxy variable
+    let proxy = document.getElementById("proxy");
+
     // Declare Headers variable
     let headers = document.getElementById("headers");
 
@@ -32,7 +35,8 @@ function sendDecryption() {
         'Headers': headers.value,
         'JSON': json.value,
         'Cookies': cookies.value,
-        'Data': data.value
+        'Data': data.value,
+        'Proxy': proxy.value,
     }
 
     // Reset all the fields
@@ -42,6 +46,7 @@ function sendDecryption() {
     json.value = ''
     cookies.value = ''
     data.value = ''
+    proxy.value = ''
 
     // Set request options
     let requestOptions = {

@@ -36,6 +36,15 @@ def main_page():
     if request.method == 'GET':
         return render_template('index.html')
     elif request.method == 'POST':
+
+        # Get the JSON data from the request
+        data = json.loads(request.data.decode())
+
+        # Get the proxy
+        proxy = data['Proxy']
+        if proxy == '':
+            proxy = None
+
         decrypt_response = scripts.decrypt.decrypt_content(
             in_pssh=request.json['PSSH'],
             license_url=request.json['License URL'],
@@ -43,7 +52,8 @@ def main_page():
             json_data=request.json['JSON'],
             cookies_data=request.json['Cookies'],
             input_data=request.json['Data'],
-            wvd=WVD
+            wvd=WVD,
+            proxy=proxy,
         )
         return jsonify(decrypt_response)
 
@@ -106,17 +116,22 @@ def extension_page():
         # Get the MPD url
         json_data = data['JSON']
 
+        # Get the proxy
+        proxy = data['Proxy']
+        if proxy == '':
+            proxy = None
+
         if data['Scheme'] == 'CommonWV':
             try:
                 keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
-                                                                 wvd=WVD, scheme=data['Scheme'])
+                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy)
                 return {'Message': f'{keys}'}
             except Exception as error:
                 return {"Message": [f'{error}']}
         if data['Scheme'] == 'Amazon':
             try:
                 keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
-                                                                 wvd=WVD, scheme=data['Scheme'])
+                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy)
                 return {'Message': f'{keys}'}
             except Exception as error:
                 return {"Message": [f'{error}']}
