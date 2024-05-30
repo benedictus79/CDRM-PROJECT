@@ -8,7 +8,7 @@ import base64
 
 
 # Defining decrypt function
-def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict = None, wvd: str = None, scheme: str = None, proxy: str = None,):
+def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict = None, json_data: dict = None, wvd: str = None, scheme: str = None, proxy: str = None,):
 
     # prepare pssh
     pssh = PSSH(in_pssh)

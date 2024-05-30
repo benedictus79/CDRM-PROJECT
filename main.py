@@ -99,6 +99,7 @@ def api_page():
 def extension_page():
     if request.method == 'GET':
         return render_template('extension.html')
+
     elif request.method == 'POST':
         # Get the JSON data from the request
         data = json.loads(request.data.decode())
@@ -115,6 +116,9 @@ def extension_page():
 
         # Get the MPD url
         json_data = data['JSON']
+        if json_data:
+            json_data = base64.b64decode(json_data).decode()
+            json_data = json.loads(json_data)
 
         # Get the proxy
         proxy = data['Proxy']
@@ -128,6 +132,7 @@ def extension_page():
                 return {'Message': f'{keys}'}
             except Exception as error:
                 return {"Message": [f'{error}']}
+
         if data['Scheme'] == 'Amazon':
             try:
                 keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
@@ -143,7 +148,11 @@ def download_extension_page():
         file_path = 'static/assets/wvg-next-cdrm.zip'
         return send_file(file_path, as_attachment=True)
     elif request.method == 'POST':
-        return
+        version = {
+            'Version': '1.0'
+        }
+        return jsonify(version)
+
 
 # Route for '/login'
 @app.route("/login", methods=['GET', 'POST'])
@@ -198,11 +207,13 @@ def profile():
     if request.method == 'GET':
         return render_template('profile.html')
 
+
 # Route for '/devine'
 @app.route("/devine", methods=['GET', 'POST', 'HEAD'])
 def devine_page():
     if request.method == 'GET':
-        return render_template('devine.html')
+        cdm_version = cdm.system_id
+        return render_template('devine.html', cdm_version=cdm_version)
     if request.method == 'POST':
         return
     if request.method == 'HEAD':
@@ -232,6 +243,7 @@ def device_open(device):
                 }
             }
         return jsonify(response_data)
+
 
 # Route for '/{device}/set_service_certificate'
 @app.route("/devine/<device>/set_service_certificate", methods=['POST'])
@@ -290,6 +302,7 @@ def get_license_challenge_page(device, licensetype):
 
         return jsonify(results)
 
+
 @app.route("/devine/<device>/parse_license", methods=['POST'])
 def parse_license(device):
     if request.method == 'POST':
@@ -307,6 +320,7 @@ def parse_license(device):
         }
 
         return jsonify(results)
+
 
 @app.route("/devine/<device>/get_keys/<key_type>", methods=['POST'])
 def get_keys(device, key_type):
@@ -349,6 +363,7 @@ def get_keys(device, key_type):
 
         return jsonify(results)
 
+
 @app.route("/devine/<device>/close/<session_id>", methods=['GET'])
 def close_session(device, session_id):
     if request.method == 'GET':
@@ -366,10 +381,6 @@ def close_session(device, session_id):
         return jsonify(results)
 
 
-
-
 # If the script is called directly, start the flask app.
 if __name__ == '__main__':
-    cdm = Cdm.from_device(Device.load(WVD))
-    print(f'CDM System ID: {cdm.system_id}')
     app.run(debug=True)
