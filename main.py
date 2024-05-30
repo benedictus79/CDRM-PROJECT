@@ -212,6 +212,7 @@ def profile():
 @app.route("/devine", methods=['GET', 'POST', 'HEAD'])
 def devine_page():
     if request.method == 'GET':
+        cdm = Cdm.from_device(WVD)
         cdm_version = cdm.system_id
         return render_template('devine.html', cdm_version=cdm_version)
     if request.method == 'POST':
