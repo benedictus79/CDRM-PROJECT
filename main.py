@@ -117,8 +117,11 @@ def extension_page():
         # Get the MPD url
         json_data = data['JSON']
         if json_data:
-            json_data = base64.b64decode(json_data).decode()
-            json_data = json.loads(json_data)
+            try:
+                json_data = base64.b64decode(json_data).decode()
+                json_data = json.loads(json_data)
+            except:
+                json_data = json_data
 
         # Get the proxy
         proxy = data['Proxy']
