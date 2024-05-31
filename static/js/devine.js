@@ -4,4 +4,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Set the current URL value in the paragraph
     document.getElementById('currentURL').innerText = currentURL;
+    document.getElementById('currentURI').innerText = currentURL;
 });

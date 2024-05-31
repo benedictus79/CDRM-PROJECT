@@ -43,3 +43,24 @@ def check_database(pssh: str):
 
         # Return not found
         return "Not found"
+
+
+def get_key_by_kid_and_service(service: str, kid: str):
+    # Connect to the database
+    dbconnection = sqlite3.connect(f"{os.getcwd()}/databases/devine.db")
+    dbcursor = dbconnection.cursor()
+
+    # Execute the SELECT query
+    dbcursor.execute("SELECT key FROM vault WHERE service = ? AND kid = ?", (service, kid))
+
+    # Fetch the result
+    result = dbcursor.fetchone()
+
+    # Close the connection
+    dbconnection.close()
+
+    # If result is None, no matching key found
+    if result is None:
+        return None
+    else:
+        return result[0]  # Returning the key

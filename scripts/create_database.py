@@ -43,5 +43,12 @@ def create_database():
         # Close the connection
         dbconnection.close()
 
+    # Check to see if a database exists in databases directory, if not create it
+    if not os.path.isfile("devine.db"):
+        dbconnection = sqlite3.connect("devine.db")
+        dbcursor = dbconnection.cursor()
+        dbcursor.execute('CREATE TABLE IF NOT EXISTS "vault" ( "service" TEXT, "kid" TEXT, '
+                             '"key" TEXT, PRIMARY KEY("kid") )')
+
     # Change back to root directory
     os.chdir(os.path.join(os.getcwd(), ".."))

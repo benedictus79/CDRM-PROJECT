@@ -20,3 +20,20 @@ def cache_keys(pssh: str, keys: str):
 
     # Close the connection
     dbconnection.close()
+
+def cache_keys_devine(service: str, kid: str, key: str):
+
+    # Connect to database
+    dbconnection = sqlite3.connect(f"{os.getcwd()}/databases/devine.db")
+
+    # Initialize a cursor
+    dbcursor = dbconnection.cursor()
+
+    # Insert PSSH and keys
+    dbcursor.execute("INSERT or REPLACE INTO vault VALUES (?, ?, ?)", (service, kid, key))
+
+    # Commit the changes
+    dbconnection.commit()
+
+    # Close the connection
+    dbconnection.close()

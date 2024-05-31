@@ -10,6 +10,8 @@ from pywidevine.cdm import Cdm
 from pywidevine.device import Device
 from pywidevine.exceptions import (InvalidContext, InvalidInitData, InvalidLicenseMessage, InvalidLicenseType,
                                    InvalidSession, SignatureMismatch, TooManySessions)
+import sqlite3
+from uuid import UUID
 
 # Create database if it doesn't exist
 scripts.create_database.create_database()
@@ -26,9 +28,6 @@ app = Flask(__name__, template_folder='templates', static_folder='static', stati
 
 # Create a secret key for logins
 app.secret_key = str(uuid.uuid4())
-
-user_info = {}
-
 
 # Route for root '/'
 @app.route("/", methods=['GET', 'POST'])
@@ -152,7 +151,7 @@ def download_extension_page():
         return send_file(file_path, as_attachment=True)
     elif request.method == 'POST':
         version = {
-            'Version': '1.0'
+            'Version': '1.1'
         }
         return jsonify(version)
 
@@ -383,6 +382,31 @@ def close_session(device, session_id):
         }
 
         return jsonify(results)
+
+@app.route("/devine/vault/<service>", methods=['POST'])
+def add_keys_devine_vault(service):
+    data = request.json['content_keys']
+    key_count = 0
+    for key_id, key in data.items():
+        scripts.key_cache.cache_keys_devine(service=service, kid=key_id, key=key)
+        key_count += 1
+    message = {
+        "code": 0,
+        "added": key_count,
+        "updated": 0
+    }
+    return jsonify(message)
+
+@app.route("/devine/vault/<service>/<kid>", methods=['GET'])
+def get_key_devine_vault(service, kid):
+    key = scripts.vault_check.get_key_by_kid_and_service(service=service, kid=kid)
+    message = {
+        "code": 0,
+        "content_key": key
+    }
+    print(message)
+    return jsonify(message)
+
 
 
 # If the script is called directly, start the flask app.

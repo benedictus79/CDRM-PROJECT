@@ -7,3 +7,4 @@
 /tailwind.config.js
 /databases/users.db
 *.pyc
+/databases/devine.db

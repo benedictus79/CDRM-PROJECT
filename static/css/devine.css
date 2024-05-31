@@ -26,8 +26,24 @@ p {
 #remote_cdm {
     text-align: left;
     margin-bottom: 5%;
+    height: 40%;
+    justify-self: right;
+    margin-right: 2%;
+}
+
+#remote_vault {
+    text-align: left;
+    margin-bottom: 5%;
+    height: 40%;
+    justify-self: left;
+    margin-left: 2%;
 }
 
 .dlinks {
     color: grey;
+}
+
+div {
+    display: grid;
+    grid-template-columns: auto auto;
 }
