@@ -119,7 +119,9 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                     json=json_data,
                     cookies=cookies_data,
                     data=challenge,
-                    proxies=proxy
+                    proxies={
+                        'http': proxy,
+                    }
                 )
             else:
                 license = requests.post(
@@ -127,7 +129,9 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                     headers=headers,
                     json=json_data,
                     cookies=cookies_data,
-                    proxies=proxy
+                    proxies={
+                        'http': proxy,
+                    }
                 )
         else:
             print("Extra challenge!!")
@@ -138,7 +142,9 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                 json=json_data,
                 cookies=cookies_data,
                 data=input_data,
-                proxies=proxy
+                proxies={
+                    'http': proxy,
+                }
             )
             if license.status_code != 200:
                 license = requests.post(
@@ -147,7 +153,9 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                     json=json_data,
                     cookies=cookies_data,
                     data=json.dumps(input_data),
-                    proxies=proxy
+                    proxies={
+                        'http': proxy,
+                    }
                 )
 
 

@@ -31,7 +31,9 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
             url=license_url,
             headers=headers,
             data=challenge,
-            proxies=proxy,
+            proxies={
+                'http': proxy,
+            },
         )
 
         # Parse the license if it comes back in plain bytes
@@ -72,7 +74,9 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
                 'widevine2Challenge': f'{base64.b64encode(challenge).decode()}',
                 'includeHdcpTestKeyInLicense': 'true',
             },
-            proxies=proxy
+            proxies={
+                'http': proxy,
+            }
         )
 
         # Parse the license if it comes back in plain bytes
