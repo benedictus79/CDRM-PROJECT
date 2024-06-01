@@ -56,7 +56,7 @@ def main_page():
 
 
 # Route for '/cache'
-@app.route("/cache", methods=['GET'])
+@app.route("/cache", methods=['GET', 'POST'])
 def cache_page():
     if request.method == 'GET':
         cache_page_key_count = scripts.key_count.count_keys()
