@@ -100,3 +100,39 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
 
         # Return the keys
         return cached_keys
+
+    if scheme == 'YouTube':
+        json_data['licenseRequest'] = base64.b64encode(challenge).decode()
+        # send license challenge
+        license = requests.post(
+            url=license_url,
+            headers=headers,
+            json=json_data,
+            proxies={
+                'http': proxy,
+            }
+        )
+        # Extract license from json dict
+        license = license.json()["license"].replace("-", "+").replace("_", "/")
+
+    # Parse the license if it comes back in plain bytes
+    try:
+        cdm.parse_license(session_id, license)
+    except Exception as error:
+        return error
+
+    # Assign variable for caching keys
+    cached_keys = ""
+
+    for key in cdm.get_keys(session_id):
+        if key.type != "SIGNING":
+            cached_keys += f"{key.kid.hex}:{key.key.hex()}\n"
+
+    # Cache the keys
+    key_cache.cache_keys(pssh=in_pssh, keys=cached_keys)
+
+    # close session, disposes of session data
+    cdm.close(session_id)
+
+    # Return the keys
+    return cached_keys

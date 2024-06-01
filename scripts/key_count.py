@@ -26,3 +26,42 @@ def count_keys():
 
     # return the result
     return stripped_result
+
+
+def count_keys_devine():
+
+    # Connect to the database
+    connection = sqlite3.connect(f"{os.getcwd()}/databases/devine.db")
+    cursor = connection.cursor()
+
+    # Execute the query to count total number of keys
+    cursor.execute("SELECT COUNT(kid) FROM vault")
+
+    # Fetch the result
+    total_keys = cursor.fetchone()[0]
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+
+    # return the key count
+    return total_keys
+
+
+def get_service_count_devine():
+    # Connect to the database
+    connection = sqlite3.connect(f"{os.getcwd()}/databases/devine.db")
+    cursor = connection.cursor()
+
+    # Execute the query to count unique services
+    cursor.execute("SELECT COUNT(DISTINCT service) FROM vault")
+
+    # Fetch the result
+    count = cursor.fetchone()[0]
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+
+    # return the count
+    return count

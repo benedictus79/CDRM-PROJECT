@@ -10,8 +10,6 @@ from pywidevine.cdm import Cdm
 from pywidevine.device import Device
 from pywidevine.exceptions import (InvalidContext, InvalidInitData, InvalidLicenseMessage, InvalidLicenseType,
                                    InvalidSession, SignatureMismatch, TooManySessions)
-import sqlite3
-from uuid import UUID
 
 # Create database if it doesn't exist
 scripts.create_database.create_database()
@@ -58,16 +56,11 @@ def main_page():
 
 
 # Route for '/cache'
-@app.route("/cache", methods=['GET', 'POST'])
+@app.route("/cache", methods=['GET'])
 def cache_page():
     if request.method == 'GET':
-        return render_template('cache.html')
-    if request.method == 'POST':
-        results = scripts.vault_check.check_database(pssh=request.json['PSSH'])
-        message = {
-            'Message': results
-        }
-        return jsonify(message)
+        cache_page_key_count = scripts.key_count.count_keys()
+        return render_template('cache.html', cache_page_key_count=cache_page_key_count)
 
 @app.route("/key_count", methods=['GET'])
 def key_count():
@@ -143,6 +136,16 @@ def extension_page():
             except Exception as error:
                 return {"Message": [f'{error}']}
 
+        if data['Scheme'] == 'YouTube':
+            try:
+                print(data['Scheme'])
+                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
+                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy, json_data=json_data)
+                print(json_data)
+                return {'Message': f'{keys}'}
+            except Exception as error:
+                return {"Message": [f'{error}']}
+
 
 @app.route("/download-extension", methods=['GET', 'POST'])
 def download_extension_page():
@@ -151,7 +154,7 @@ def download_extension_page():
         return send_file(file_path, as_attachment=True)
     elif request.method == 'POST':
         version = {
-            'Version': '1.1'
+            'Version': '1.11'
         }
         return jsonify(version)
 
@@ -216,7 +219,9 @@ def devine_page():
     if request.method == 'GET':
         cdm = Cdm.from_device(device=Device.load(WVD))
         cdm_version = cdm.system_id
-        return render_template('devine.html', cdm_version=cdm_version)
+        devine_service_count = scripts.key_count.get_service_count_devine()
+        devine_key_count = scripts.key_count.count_keys_devine()
+        return render_template('devine.html', cdm_version=cdm_version, devine_service_count=devine_service_count, devine_key_count=devine_key_count)
     if request.method == 'POST':
         return
     if request.method == 'HEAD':
@@ -386,14 +391,19 @@ def close_session(device, session_id):
 @app.route("/devine/vault/<service>", methods=['POST'])
 def add_keys_devine_vault(service):
     data = request.json['content_keys']
-    key_count = 0
+    replaced = 0
+    inserted = 0
     for key_id, key in data.items():
-        scripts.key_cache.cache_keys_devine(service=service, kid=key_id, key=key)
-        key_count += 1
+        result = scripts.key_cache.cache_keys_devine(service=service, kid=key_id, key=key)
+        if result == 'inserted':
+            inserted += 1
+        if result == 'replaced':
+            replaced += 1
+
     message = {
         "code": 0,
-        "added": key_count,
-        "updated": 0
+        "added": inserted,
+        "updated": replaced
     }
     return jsonify(message)
 
@@ -404,9 +414,7 @@ def get_key_devine_vault(service, kid):
         "code": 0,
         "content_key": key
     }
-    print(message)
     return jsonify(message)
-
 
 
 # If the script is called directly, start the flask app.

@@ -25,18 +25,23 @@ p {
 
 #remote_cdm {
     text-align: left;
-    margin-bottom: 5%;
-    height: 40%;
     justify-self: right;
     margin-right: 2%;
+    align-self: stretch;
 }
 
 #remote_vault {
     text-align: left;
-    margin-bottom: 5%;
-    height: 40%;
     justify-self: left;
+    align-self: stretch;
     margin-left: 2%;
+}
+
+#vault_results {
+    grid-column: 1 / span 2; /* Span both columns */
+    text-align: left;
+    width: 10%;
+    align-self: start;
 }
 
 .dlinks {
@@ -45,5 +50,6 @@ p {
 
 div {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
 }

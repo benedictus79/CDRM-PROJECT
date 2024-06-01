@@ -29,11 +29,22 @@ def cache_keys_devine(service: str, kid: str, key: str):
     # Initialize a cursor
     dbcursor = dbconnection.cursor()
 
-    # Insert PSSH and keys
-    dbcursor.execute("INSERT or REPLACE INTO vault VALUES (?, ?, ?)", (service, kid, key))
+    # Check if the key already exists
+    dbcursor.execute("SELECT COUNT(*) FROM vault WHERE service = ? AND kid = ?", (service, kid))
+    row = dbcursor.fetchone()
+    if row[0] > 0:
+        # Key already exists, perform REPLACE operation
+        dbcursor.execute("REPLACE INTO vault VALUES (?, ?, ?)", (service, kid, key))
+        operation = "replaced"
+    else:
+        # Key does not exist, perform INSERT operation
+        dbcursor.execute("INSERT INTO vault VALUES (?, ?, ?)", (service, kid, key))
+        operation = "inserted"
 
     # Commit the changes
     dbconnection.commit()
 
     # Close the connection
     dbconnection.close()
+
+    return operation
