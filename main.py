@@ -142,12 +142,18 @@ def extension_page():
             except Exception as error:
                 return {"Message": [f'{error}']}
 
-        if data['Scheme'] == 'YouTube':
+        if data['Scheme'] == 'RTE':
             try:
-                print(data['Scheme'])
                 keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
                                                                  wvd=WVD, scheme=data['Scheme'], proxy=proxy, json_data=json_data)
-                print(json_data)
+                return {'Message': f'{keys}'}
+            except Exception as error:
+                return {"Message": [f'{error}']}
+
+        if data['Scheme'] == 'YouTube':
+            try:
+                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
+                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy, json_data=json_data)
                 return {'Message': f'{keys}'}
             except Exception as error:
                 return {"Message": [f'{error}']}
@@ -160,7 +166,7 @@ def download_extension_page():
         return send_file(file_path, as_attachment=True)
     elif request.method == 'POST':
         version = {
-            'Version': '1.11'
+            'Version': '1.12'
         }
         return jsonify(version)
 
