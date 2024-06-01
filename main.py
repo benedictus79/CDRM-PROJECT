@@ -61,6 +61,12 @@ def cache_page():
     if request.method == 'GET':
         cache_page_key_count = scripts.key_count.count_keys()
         return render_template('cache.html', cache_page_key_count=cache_page_key_count)
+    if request.method == 'POST':
+        results = scripts.vault_check.check_database(pssh=request.json['PSSH'])
+        message = {
+            'Message': results
+        }
+        return jsonify(message)
 
 @app.route("/key_count", methods=['GET'])
 def key_count():
