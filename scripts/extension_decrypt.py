@@ -5,7 +5,8 @@ from pywidevine import Device
 import requests
 from . import key_cache
 import base64
-
+import tls_client
+from xml.etree import ElementTree as ET
 
 # Defining decrypt function
 def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict = None, json_data: dict = None, wvd: str = None, scheme: str = None, proxy: str = None,):
@@ -170,3 +171,85 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
 
         # Return the keys
         return cached_keys
+
+    if scheme == 'Canal+':
+
+        try:
+            json_data['ServiceRequest']['InData']['ChallengeInfo'] = base64.b64encode(challenge).decode()
+
+            # send license challenge
+            license = requests.post(
+                url=license_url,
+                headers=headers,
+                json=json_data
+            )
+
+            # Parse the license
+            try:
+                cdm.parse_license(session_id, license.json()['ServiceResponse']['OutData']['LicenseInfo'])
+            except Exception as error:
+                return error
+
+            # Assign variable for caching keys
+            cached_keys = ""
+
+            for key in cdm.get_keys(session_id):
+                if key.type != "SIGNING":
+                    cached_keys += f"{key.kid.hex}:{key.key.hex()}\n"
+
+            # Cache the keys
+            key_cache.cache_keys(pssh=in_pssh, keys=cached_keys)
+
+            # close session, disposes of session data
+            cdm.close(session_id)
+
+            # Return the keys
+            return cached_keys
+
+        except:
+
+            try:
+                session = tls_client.Session()
+
+                response = session.post(
+                    url=license_url,
+                    headers=headers,
+                    data=f'{base64.b64encode(challenge).decode()}'
+                ).content.decode()
+
+                # Define the namespace
+                namespace = {'ns': 'http://www.canal-plus.com/DRM/V1'}
+
+                # Parse the XML string
+                root = ET.fromstring(response)
+
+                # Find the license element using the namespace
+                license_element = root.find('.//ns:license', namespace)
+
+                # Extract the text content of the license element
+                license_content = license_element.text
+
+                # Parse the license
+                try:
+                    cdm.parse_license(session_id, license_content)
+                except Exception as error:
+                    return error
+
+                # Assign variable for caching keys
+                cached_keys = ""
+
+                for key in cdm.get_keys(session_id):
+                    if key.type != "SIGNING":
+                        cached_keys += f"{key.kid.hex}:{key.key.hex()}\n"
+
+                # Cache the keys
+                key_cache.cache_keys(pssh=in_pssh, keys=cached_keys)
+
+                # close session, disposes of session data
+                cdm.close(session_id)
+
+                # Return the keys
+                return cached_keys
+
+            except Exception as error:
+                return error

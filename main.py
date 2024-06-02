@@ -102,16 +102,6 @@ def extension_page():
         # Get the JSON data from the request
         data = json.loads(request.data.decode())
 
-        # Get the PSSH
-        pssh = data['PSSH']
-
-        # Get the license URL
-        lic_url = data['License URL']
-
-        # Get the headers
-        headers = data['Headers']
-        headers = json.loads(headers)
-
         # Get the MPD url
         json_data = data['JSON']
         if json_data:
@@ -126,37 +116,12 @@ def extension_page():
         if proxy == '':
             proxy = None
 
-        if data['Scheme'] == 'CommonWV':
-            try:
-                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
-                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy)
-                return {'Message': f'{keys}'}
-            except Exception as error:
-                return {"Message": [f'{error}']}
-
-        if data['Scheme'] == 'Amazon':
-            try:
-                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
-                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy)
-                return {'Message': f'{keys}'}
-            except Exception as error:
-                return {"Message": [f'{error}']}
-
-        if data['Scheme'] == 'RTE':
-            try:
-                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
-                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy, json_data=json_data)
-                return {'Message': f'{keys}'}
-            except Exception as error:
-                return {"Message": [f'{error}']}
-
-        if data['Scheme'] == 'YouTube':
-            try:
-                keys = scripts.extension_decrypt.decrypt_content(in_pssh=pssh, license_url=lic_url, headers=headers,
-                                                                 wvd=WVD, scheme=data['Scheme'], proxy=proxy, json_data=json_data)
-                return {'Message': f'{keys}'}
-            except Exception as error:
-                return {"Message": [f'{error}']}
+        try:
+            keys = scripts.extension_decrypt.decrypt_content(in_pssh=data['PSSH'], license_url=data['License URL'], headers=json.loads(data['Headers']),
+                                                             wvd=WVD, scheme=data['Scheme'], proxy=proxy, json_data=json_data)
+            return {'Message': f'{keys}'}
+        except Exception as error:
+            return {"Message": [f'{error}']}
 
 
 @app.route("/download-extension", methods=['GET', 'POST'])
@@ -166,7 +131,7 @@ def download_extension_page():
         return send_file(file_path, as_attachment=True)
     elif request.method == 'POST':
         version = {
-            'Version': '1.12'
+            'Version': '1.13'
         }
         return jsonify(version)
 
