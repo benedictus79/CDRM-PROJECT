@@ -2,6 +2,7 @@
 from pywidevine import PSSH
 from pywidevine import Cdm
 from pywidevine import Device
+from pywidevine import RemoteCdm
 import requests
 from . import key_cache
 import base64
@@ -14,11 +15,23 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
     # prepare pssh
     pssh = PSSH(in_pssh)
 
-    # load device
-    device = Device.load(wvd)
+    if wvd != 'Remote':
 
-    # load CDM from device
-    cdm = Cdm.from_device(device)
+        # load device
+        device = Device.load(wvd)
+
+        # load CDM from device
+        cdm = Cdm.from_device(device)
+
+    else:
+        cdm = RemoteCdm(
+            device_type='ANDROID',
+            system_id=int(requests.post(url='https://cdrm-project.com/devine').content),
+            security_level=3,
+            host='https://cdrm-project.com/devine',
+            secret='CDRM-Project',
+            device_name='CDM'
+        )
 
     # open CDM session
     session_id = cdm.open()
@@ -48,7 +61,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
                 try:
                     cdm.parse_license(session_id, license.json()['licenseData'])
                 except Exception as error:
-                    return [error]
+                    return f'{error}\n\n{license.content}'
 
         # Assign variable for caching keys
         cached_keys = ""
@@ -84,7 +97,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
         try:
             cdm.parse_license(session_id, license.json()['widevine2License']['license'])
         except Exception as error:
-            return error
+            return [f'{error}\n\n{license.content}']
 
         # Assign variable for caching keys
         cached_keys = ""
@@ -120,7 +133,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
         try:
             cdm.parse_license(session_id, license)
         except Exception as error:
-            return error
+            return f'{error}\n\n{license.content}'
 
         # Assign variable for caching keys
         cached_keys = ""
@@ -154,7 +167,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
         try:
             cdm.parse_license(session_id, license.json()['getWidevineLicenseResponse']['license'])
         except Exception as error:
-            return error
+            return f'{error}\n\n{license.content}'
 
         # Assign variable for caching keys
         cached_keys = ""
@@ -188,7 +201,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
             try:
                 cdm.parse_license(session_id, license.json()['ServiceResponse']['OutData']['LicenseInfo'])
             except Exception as error:
-                return error
+                return f'{error}\n\n{license.content}'
 
             # Assign variable for caching keys
             cached_keys = ""
@@ -233,7 +246,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
                 try:
                     cdm.parse_license(session_id, license_content)
                 except Exception as error:
-                    return error
+                    return f'{error}\n\n{license.content}'
 
                 # Assign variable for caching keys
                 cached_keys = ""
@@ -252,4 +265,76 @@ def decrypt_content(in_pssh: str = None, license_url: str = None, headers: dict 
                 return cached_keys
 
             except Exception as error:
-                return error
+                return [f'{error}\n\n{license.content}']
+
+    if scheme == 'NosTV':
+        # send license challenge
+        license = requests.post(
+            url=license_url,
+            headers=headers,
+            json={
+                'challenge': base64.b64encode(challenge).decode(),
+            },
+            proxies={
+                'http': proxy,
+            },
+        )
+
+        # Parse the license if it comes back in plain bytes
+        try:
+            cdm.parse_license(session_id, license.json()['license'][0])
+        except Exception as error:
+            return f'{error}\n\n{license.content}'
+
+        # Assign variable for caching keys
+        cached_keys = ""
+
+        for key in cdm.get_keys(session_id):
+            if key.type != "SIGNING":
+                cached_keys += f"{key.kid.hex}:{key.key.hex()}\n"
+
+        # Cache the keys
+        key_cache.cache_keys(pssh=in_pssh, keys=cached_keys)
+
+        # close session, disposes of session data
+        cdm.close(session_id)
+
+        # Return the keys
+        return cached_keys
+
+    if scheme == 'AstroGo':
+
+        # Insert the challenge
+        json_data['licenseChallenge'] = base64.b64encode(challenge).decode()
+
+        # send license challenge
+        license = requests.post(
+            url=license_url,
+            headers=headers,
+            json=json_data,
+            proxies={
+                'http': proxy,
+            },
+        )
+
+        # Parse the license if it comes back in plain bytes
+        try:
+            cdm.parse_license(session_id, license.content)
+        except Exception as error:
+            return f'{error}\n\n{license.content}'
+
+        # Assign variable for caching keys
+        cached_keys = ""
+
+        for key in cdm.get_keys(session_id):
+            if key.type != "SIGNING":
+                cached_keys += f"{key.kid.hex}:{key.key.hex()}\n"
+
+        # Cache the keys
+        key_cache.cache_keys(pssh=in_pssh, keys=cached_keys)
+
+        # close session, disposes of session data
+        cdm.close(session_id)
+
+        # Return the keys
+        return cached_keys

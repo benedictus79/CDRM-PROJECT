@@ -9,7 +9,6 @@
  - [Python](https://www.python.org/downloads/) with PIP installed
 
    > Python 3.12 was used at the time of writing
- - L1/L3 Content Decryption Module provisioned in .WVD format using [pyWidevine](https://github.com/devine-dl/pywidevine)
  
  ## Installation
  
@@ -22,7 +21,8 @@
     > 
     > Linux - `source bin/activate`
 
+ - Extract CDRM-Project 2.0 git contents into the newly created `CDRM-Project` folder
  - Install python dependencies `pip install -r requirements.txt`
- - Place your .WVD file into `/databases/WVDs`
+ - (Optional) Place your .WVD file into `/databases/WVDs`
  - Run the application `python main.py`
 

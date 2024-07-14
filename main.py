@@ -1,5 +1,6 @@
 # Import dependencies
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file, Response, current_app
+from flask import Flask, render_template, request, jsonify, session, redirect, send_file, Response, current_app
+import requests
 import scripts
 import uuid
 import json
@@ -8,8 +9,7 @@ from pywidevine import __version__
 from pywidevine.pssh import PSSH
 from pywidevine.cdm import Cdm
 from pywidevine.device import Device
-from pywidevine.exceptions import (InvalidContext, InvalidInitData, InvalidLicenseMessage, InvalidLicenseType,
-                                   InvalidSession, SignatureMismatch, TooManySessions)
+from pywidevine import RemoteCdm
 
 # Create database if it doesn't exist
 scripts.create_database.create_database()
@@ -19,7 +19,15 @@ WVD = scripts.wvd_check.check_for_wvd()
 
 # If no WVD found, exit
 if WVD is None:
-    exit("No .wvd file found, please place one in /databases/WVDs and try again.")
+    WVD = 'Remote'
+    rcdm = RemoteCdm(
+                device_type='ANDROID',
+                system_id=int(requests.post(url='https://cdrm-project.com/devine').content),
+                security_level=3,
+                host='https://cdrm-project.com/devine',
+                secret='CDRM-Project',
+                device_name='CDM'
+            )
 
 # Define Flask app object, give template and static arguments.
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
@@ -131,7 +139,7 @@ def download_extension_page():
         return send_file(file_path, as_attachment=True)
     elif request.method == 'POST':
         version = {
-            'Version': '1.13'
+            'Version': '1.16'
         }
         return jsonify(version)
 
@@ -194,13 +202,23 @@ def profile():
 @app.route("/devine", methods=['GET', 'POST', 'HEAD'])
 def devine_page():
     if request.method == 'GET':
-        cdm = Cdm.from_device(device=Device.load(WVD))
-        cdm_version = cdm.system_id
+        if WVD != 'Remote':
+            cdm = Cdm.from_device(device=Device.load(WVD))
+            cdm_version = cdm.system_id
+        else:
+            cdm = rcdm
+            cdm_version = cdm.system_id
         devine_service_count = scripts.key_count.get_service_count_devine()
         devine_key_count = scripts.key_count.count_keys_devine()
         return render_template('devine.html', cdm_version=cdm_version, devine_service_count=devine_service_count, devine_key_count=devine_key_count)
     if request.method == 'POST':
-        return
+        if WVD != 'Remote':
+            cdm = Cdm.from_device(device=Device.load(WVD))
+            cdm_version = cdm.system_id
+        else:
+            cdm = rcdm
+            cdm_version = cdm.system_id
+        return str(cdm_version)
     if request.method == 'HEAD':
         response = Response(status=200)
         response.headers.update({
@@ -213,8 +231,11 @@ def devine_page():
 @app.route("/devine/<device>/open", methods=['GET'])
 def device_open(device):
     if request.method == 'GET':
-        cdm_device = Device.load(WVD)
-        cdm = current_app.config['cdms'] = Cdm.from_device(cdm_device)
+        if WVD != 'Remote':
+            cdm_device = Device.load(WVD)
+            cdm = current_app.config['cdms'] = Cdm.from_device(cdm_device)
+        else:
+            cdm = current_app.config['cdms'] = rcdm
         session_id = cdm.open()
         response_data = {
             "status": 200,

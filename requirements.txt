@@ -1,3 +1,5 @@
 Flask
 pywidevine
 requests
+tls-client
+typing-extensions

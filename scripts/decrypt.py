@@ -5,6 +5,7 @@ import json
 from pywidevine import PSSH
 from pywidevine import Cdm
 from pywidevine import Device
+from pywidevine import RemoteCdm
 import requests
 import ast
 from . import key_cache
@@ -31,11 +32,23 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
             'Message': str(error)
         }
 
-    # load device
-    device = Device.load(wvd)
+    if wvd != 'Remote':
 
-    # load CDM from device
-    cdm = Cdm.from_device(device)
+        # load device
+        device = Device.load(wvd)
+
+        # load CDM from device
+        cdm = Cdm.from_device(device)
+
+    else:
+        cdm = RemoteCdm(
+            device_type='ANDROID',
+            system_id=int(requests.post(url='https://cdrm-project.com/devine').content),
+            security_level=3,
+            host='https://cdrm-project.com/devine',
+            secret='CDRM-Project',
+            device_name='CDM'
+        )
 
     # open CDM session
     session_id = cdm.open()
@@ -161,7 +174,7 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
 
     except Exception as error:
         return {
-            'Message': str(error)
+            'Message': f'An error occured {error}\n\n{license.content}'
         }
 
     # Another try statement to parse licenses
@@ -180,10 +193,14 @@ def decrypt_content(in_pssh: str = None, license_url: str = None,
                 except:
                     try:
                         cdm.parse_license(session_id, license.json().get('widevine2License'))
-                    except Exception as error:
-                        return {
-                            'Message': str(error)
-                        }
+                    except:
+                        try:
+                            cdm.parse_license(session_id, license.json().get('license')[0])
+                        except Exception as error:
+                            return {
+                                'Message': f'An error occured {error}\n\n{license.content}'
+                            }
+
 
     # assign variable for returned keys
     returned_keys = ""
